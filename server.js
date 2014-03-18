@@ -14,8 +14,8 @@ console.log('http server listening on %d', port);
 var wss = new WebSocketServer({server: server});
 console.log('websocket server created');
 wss.on('connection', function(ws) {
-    console.log( "started at: %d", new Date().getTime());
     var id = setInterval(function() {
+        console.log( "send date to client");
         ws.send(JSON.stringify(new Date().getTime()), function() {  });
     }, 1000);
 
@@ -27,9 +27,7 @@ wss.on('connection', function(ws) {
     });
 
     ws.onmessage = function (event) {
-
-      console.log( "got message from client at: %d", new Date().getTime());
-      console.log( "message was sent to client at: " + event.data.toString() );
+      console.log("got response from client");
     };
 
 });
