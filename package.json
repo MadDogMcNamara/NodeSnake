@@ -1,5 +1,5 @@
 {
-  "name": "NodeSnake",
+  "name": "node-snake",
   "version": "0.0.1",
   "repository": {
     "type": "git",
@@ -12,5 +12,17 @@
   "engines": {
     "node": "0.10.x",
     "npm": "1.2.x"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.",
+  "bugs": {
+    "url": "https://github.com/MadDogMcNamara/NodeSnake/issues"
+  },
+  "homepage": "https://github.com/MadDogMcNamara/NodeSnake",
+  "main": "server.js",
+  "devDependencies": {},
+  "author": "Ryan McNamara",
+  "license": "MIT"
 }

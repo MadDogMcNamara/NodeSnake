@@ -20,10 +20,15 @@
     <script>
       var host = location.origin.replace(/^http/, 'ws')
       var ws = new WebSocket(host);
+
+      ws.onopen = function(event) {
+          ws.send( "onopenevent" );
+      }
       ws.onmessage = function (event) {
         var li = document.createElement('li');
         li.innerHTML = JSON.parse(event.data);
         document.querySelector('#pings').appendChild(li);
+          ws.send( "gotmessage" );
       };
     </script>
   </head>
