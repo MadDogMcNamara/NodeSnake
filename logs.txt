@@ -1,0 +1,69 @@
+2014-03-18T05:00:52.769143+00:00 heroku[api]: Enable Logplex by rjmcnama@mtu.edu
+2014-03-18T05:00:52.769211+00:00 heroku[api]: Release v2 created by rjmcnama@mtu.edu
+2014-03-18T05:01:11+00:00 heroku[slug-compiler]: Slug compilation started
+2014-03-18T05:01:27+00:00 heroku[slug-compiler]: Slug compilation finished
+2014-03-18T05:01:30.124513+00:00 heroku[web.1]: Starting process with command `node server.js`
+2014-03-18T05:01:27.611123+00:00 heroku[api]: Scale to web=1 by rjmcnama@mtu.edu
+2014-03-18T05:01:27.760048+00:00 heroku[api]: Deploy da0bb8d by rjmcnama@mtu.edu
+2014-03-18T05:01:27.760048+00:00 heroku[api]: Release v3 created by rjmcnama@mtu.edu
+2014-03-18T05:01:30.044893+00:00 heroku[web.1]: Starting process with command `node server.js`
+2014-03-18T05:01:31.607939+00:00 app[web.1]: http server listening on 38641
+2014-03-18T05:01:31.616668+00:00 app[web.1]: websocket server created
+2014-03-18T05:01:31.392899+00:00 app[web.1]: websocket server created
+2014-03-18T05:01:31.390713+00:00 app[web.1]: http server listening on 9550
+2014-03-18T05:01:31.998569+00:00 heroku[web.1]: State changed from starting to up
+2014-03-18T05:01:35.359594+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2014-03-18T05:01:36.485639+00:00 heroku[router]: at=info method=GET path=/ host=aqueous-retreat-5092.herokuapp.com request_id=0862e3ec-7ab9-4ba4-8dfc-aece9bc3a615 fwd="24.13.173.22" dyno=web.1 connect=1ms service=25ms status=200 bytes=966
+2014-03-18T05:01:36.654482+00:00 heroku[router]: at=info method=GET path=/favicon.ico host=aqueous-retreat-5092.herokuapp.com request_id=17aa733b-5d3c-4ecb-9f52-b7b3e8befe8d fwd="24.13.173.22" dyno=web.1 connect=2ms service=6ms status=404 bytes=193
+2014-03-18T05:01:36.623002+00:00 heroku[router]: at=error code=H23 desc="Endpoint misconfigured" method=GET path=/ host=aqueous-retreat-5092.herokuapp.com request_id=5244feb2-d5b2-4bce-8e3a-4ad946637cf4 fwd="24.13.173.22" dyno= connect= service= status=503 bytes=
+2014-03-18T05:01:37.323024+00:00 heroku[web.1]: Process exited with status 143
+2014-03-18T05:02:53.142134+00:00 heroku[router]: at=info method=GET path=/ host=aqueous-retreat-5092.herokuapp.com request_id=d0a94dc1-4eee-4804-990f-10ba050dca8c fwd="24.13.173.22" dyno=web.1 connect=1ms service=5ms status=304 bytes=237
+2014-03-18T05:02:53.277448+00:00 heroku[router]: at=error code=H23 desc="Endpoint misconfigured" method=GET path=/ host=aqueous-retreat-5092.herokuapp.com request_id=760bd261-96dc-4cf1-9440-1c1c95635f64 fwd="24.13.173.22" dyno= connect= service= status=503 bytes=
+2014-03-18T05:16:46.801174+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=7388c75a-1984-489f-ab47-db563cee40b6 fwd="24.13.173.22" dyno=web.1 connect=1ms service=4ms status=200 bytes=966
+2014-03-18T05:16:47.011972+00:00 heroku[router]: at=info method=GET path=/favicon.ico host=node-snake.herokuapp.com request_id=4890a666-c17d-4e87-9df7-7147a8aeae9b fwd="24.13.173.22" dyno=web.1 connect=1ms service=4ms status=404 bytes=193
+2014-03-18T05:16:46.949915+00:00 app[web.1]: websocke
+t connection open
+2014-03-18T05:16:59.047069+00:00 app[web.1]: websocket connection close
+2014-03-18T05:16:59.051111+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=31aae251-3fe7-4a97-a5f2-b2363e8a9025 fwd="24.13.173.22" dyno=web.1 connect=2ms service=12101ms status=101 bytes=465
+2014-03-18T05:26:37.888517+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=989193bb-e373-4051-bd52-36240d991134 fwd="24.13.173.22" dyno=web.1 connect=1ms service=4ms status=304 bytes=237
+2014-03-18T05:26:38.026014+00:00 app[web.1]: websocket connection open
+2014-03-18T05:33:18.870689+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=95985771-93cd-4eee-a3ab-d311737e6ae5 fwd="24.13.173.22" dyno=web.1 connect=2ms service=400847ms status=101 bytes=11329
+2014-03-18T05:33:18.869634+00:00 app[web.1]: websocket connection close
+2014-03-18T05:41:45+00:00 heroku[slug-compiler]: Slug compilation started
+2014-03-18T05:41:49.185267+00:00 heroku[api]: Release v4 created by rjmcnama@mtu.edu
+2014-03-18T05:41:49.185267+00:00 heroku[api]: Deploy e55380b by rjmcnama@mtu.edu
+2014-03-18T05:41:49+00:00 heroku[slug-compiler]: Slug compilation finished
+2014-03-18T05:41:49.535232+00:00 heroku[web.1]: State changed from up to starting
+2014-03-18T05:41:51.086080+00:00 heroku[web.1]: Starting process with command `node server.js`
+2014-03-18T05:41:51.891346+00:00 app[web.1]: websocket server created
+2014-03-18T05:41:51.888296+00:00 app[web.1]: http server listening on 5573
+2014-03-18T05:41:52.238397+00:00 heroku[web.1]: State changed from starting to up
+2014-03-18T05:41:52.356437+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2014-03-18T05:41:54.705729+00:00 heroku[web.1]: Process exited with status 143
+2014-03-18T05:41:57.018288+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=442589c8-e368-4c49-ade9-7b45a4bd4a44 fwd="24.13.173.22" dyno=web.1 connect=1ms service=11ms status=200 bytes=1082
+2014-03-18T05:41:57.203234+00:00 app[web.1]: started at: 1395121317202
+2014-03-18T05:41:57.203546+00:00 app[web.1]: websocket connection open
+2014-03-18T05:41:57.257053+00:00 app[web.1]: got message from client at: 1395121317256
+2014-03-18T05:41:58.259970+00:00 app[web.1]: got message from client at: 1395121318259
+2014-03-18T05:41:59.252933+00:00 app[web.1]: got message from client at: 1395121319252
+2014-03-18T05:42:00.253970+00:00 app[web.1]: got message from client at: 1395121320253
+2014-03-18T05:42:01.252379+00:00 app[web.1]: got message from client at: 1395121321252
+2014-03-18T05:42:02.254234+00:00 app[web.1]: got message from client at: 1395121322254
+2014-03-18T05:42:03.251436+00:00 app[web.1]: got message from client at: 1395121323251
+2014-03-18T05:42:04.259219+00:00 app[web.1]: got message from client at: 1395121324259
+2014-03-18T05:42:05.257514+00:00 app[web.1]: got message from client at: 1395121325257
+2014-03-18T05:42:06.256209+00:00 app[web.1]: got message from client at: 1395121326255
+2014-03-18T05:42:07.257053+00:00 app[web.1]: got message from client at: 1395121327256
+2014-03-18T05:42:08.256129+00:00 app[web.1]: got message from client at: 1395121328255
+2014-03-18T05:42:09.256446+00:00 app[web.1]: got message from client at: 1395121329256
+2014-03-18T05:42:10.260027+00:00 app[web.1]: got message from client at: 1395121330259
+2014-03-18T05:42:11.271103+00:00 app[web.1]: got message from client at: 1395121331270
+2014-03-18T05:42:12.260514+00:00 app[web.1]: got message from client at: 1395121332260
+2014-03-18T05:42:13.261977+00:00 app[web.1]: got message from client at: 1395121333261
+2014-03-18T05:42:14.274440+00:00 app[web.1]: got message from client at: 1395121334274
+2014-03-18T05:42:15.265859+00:00 app[web.1]: got message from client at: 1395121335265
+2014-03-18T05:42:16.271376+00:00 app[web.1]: got message from client at: 1395121336271
+2014-03-18T05:42:17.266223+00:00 app[web.1]: got message from client at: 1395121337266
+2014-03-18T05:42:18.273259+00:00 app[web.1]: got message from client at: 1395121338273
+2014-03-18T05:42:19.266893+00:00 app[web.1]: got message from client at: 1395121339266
+2014-03-18T05:42:20.267322+00:00 app[web.1]: got message from client at: 1395121340267
