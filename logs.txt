@@ -1,83 +1,3 @@
-2014-03-18T05:44:11.375832+00:00 app[web.1]: got message from client at: 1395121451375
-2014-03-18T05:44:12.372854+00:00 app[web.1]: got message from client at: 1395121452372
-2014-03-18T05:44:13.371218+00:00 app[web.1]: got message from client at: 1395121453371
-2014-03-18T05:44:14.371941+00:00 app[web.1]: got message from client at: 1395121454371
-2014-03-18T05:44:15.379299+00:00 app[web.1]: got message from client at: 1395121455379
-2014-03-18T05:44:16.376576+00:00 app[web.1]: got message from client at: 1395121456376
-2014-03-18T05:44:17.377417+00:00 app[web.1]: got message from client at: 1395121457377
-2014-03-18T05:44:18.379626+00:00 app[web.1]: got message from client at: 1395121458379
-2014-03-18T05:44:19.378499+00:00 app[web.1]: got message from client at: 1395121459378
-2014-03-18T05:44:20.380143+00:00 app[web.1]: got message from client at: 1395121460379
-2014-03-18T05:44:21.380380+00:00 app[web.1]: got message from client at: 1395121461380
-2014-03-18T05:44:22.378479+00:00 app[web.1]: got message from client at: 1395121462378
-2014-03-18T05:44:23.383047+00:00 app[web.1]: got message from client at: 1395121463382
-2014-03-18T05:44:24.382298+00:00 app[web.1]: got message from client at: 1395121464382
-2014-03-18T05:44:25.381095+00:00 app[web.1]: got message from client at: 1395121465380
-2014-03-18T05:44:26.384269+00:00 app[web.1]: got message from client at: 1395121466384
-2014-03-18T05:44:27.382626+00:00 app[web.1]: got message from client at: 1395121467382
-2014-03-18T05:44:28.389912+00:00 app[web.1]: got message from client at: 1395121468389
-2014-03-18T05:44:29.384911+00:00 app[web.1]: got message from client at: 1395121469384
-2014-03-18T05:44:30.396399+00:00 app[web.1]: got message from client at: 1395121470396
-2014-03-18T05:44:31.396369+00:00 app[web.1]: got message from client at: 1395121471396
-2014-03-18T05:44:32.400434+00:00 app[web.1]: got message from client at: 1395121472400
-2014-03-18T05:44:33.387234+00:00 app[web.1]: got message from client at: 1395121473387
-2014-03-18T05:44:34.394413+00:00 app[web.1]: got message from client at: 1395121474394
-2014-03-18T05:44:35.386397+00:00 app[web.1]: got message from client at: 1395121475386
-2014-03-18T05:44:36.392154+00:00 app[web.1]: got message from client at: 1395121476392
-2014-03-18T05:44:37.393660+00:00 app[web.1]: got message from client at: 1395121477393
-2014-03-18T05:44:38.389655+00:00 app[web.1]: got message from client at: 1395121478389
-2014-03-18T05:44:39.390414+00:00 app[web.1]: got message from client at: 1395121479390
-2014-03-18T05:44:40.390525+00:00 app[web.1]: got message from client at: 1395121480390
-2014-03-18T05:44:41.391018+00:00 app[web.1]: got message from client at: 1395121481390
-2014-03-18T05:44:42.392012+00:00 app[web.1]: got message from client at: 1395121482391
-2014-03-18T05:44:43.392719+00:00 app[web.1]: got message from client at: 1395121483392
-2014-03-18T05:44:44.398467+00:00 app[web.1]: got message from client at: 1395121484398
-2014-03-18T05:44:45.392094+00:00 app[web.1]: got message from client at: 1395121485391
-2014-03-18T05:44:46.410250+00:00 app[web.1]: got message from client at: 1395121486410
-2014-03-18T05:44:47.396844+00:00 app[web.1]: got message from client at: 1395121487396
-2014-03-18T05:44:48.399903+00:00 app[web.1]: got message from client at: 1395121488399
-2014-03-18T05:44:49.397546+00:00 app[web.1]: got message from client at: 1395121489397
-2014-03-18T05:44:50.406003+00:00 app[web.1]: got message from client at: 1395121490405
-2014-03-18T05:44:51.403723+00:00 app[web.1]: got message from client at: 1395121491403
-2014-03-18T05:44:52.407733+00:00 app[web.1]: got message from client at: 1395121492407
-2014-03-18T05:44:53.409945+00:00 app[web.1]: got message from client at: 1395121493409
-2014-03-18T05:44:54.419915+00:00 app[web.1]: got message from client at: 1395121494419
-2014-03-18T05:44:55.414491+00:00 app[web.1]: got message from client at: 1395121495414
-2014-03-18T05:44:56.423355+00:00 app[web.1]: got message from client at: 1395121496423
-2014-03-18T05:44:57.409870+00:00 app[web.1]: got message from client at: 1395121497409
-2014-03-18T05:44:58.413876+00:00 app[web.1]: got message from client at: 1395121498413
-2014-03-18T05:44:59.430085+00:00 app[web.1]: got message from client at: 1395121499429
-2014-03-18T05:45:00.431872+00:00 app[web.1]: got message from client at: 1395121500431
-2014-03-18T05:45:01.425109+00:00 app[web.1]: got message from client at: 1395121501424
-2014-03-18T05:45:02.423612+00:00 app[web.1]: got message from client at: 1395121502423
-2014-03-18T05:45:03.426529+00:00 app[web.1]: got message from client at: 1395121503426
-2014-03-18T05:45:04.430969+00:00 app[web.1]: got message from client at: 1395121504430
-2014-03-18T05:45:05.428723+00:00 app[web.1]: got message from client at: 1395121505428
-2014-03-18T05:45:06.438852+00:00 app[web.1]: got message from client at: 1395121506438
-2014-03-18T05:45:07.427281+00:00 app[web.1]: got message from client at: 1395121507427
-2014-03-18T05:45:08.428224+00:00 app[web.1]: got message from client at: 1395121508428
-2014-03-18T05:45:09.426113+00:00 app[web.1]: got message from client at: 1395121509425
-2014-03-18T05:45:10.429814+00:00 app[web.1]: got message from client at: 1395121510429
-2014-03-18T05:45:11.430718+00:00 app[web.1]: got message from client at: 1395121511430
-2014-03-18T05:45:12.434108+00:00 app[web.1]: got message from client at: 1395121512433
-2014-03-18T05:45:13.785330+00:00 app[web.1]: got message from client at: 1395121513437
-2014-03-18T05:45:14.329235+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=378c51bf-31bd-4185-8e09-9913c6136057 fwd="24.13.173.22" dyno=web.1 connect=1ms service=197131ms status=101 bytes=5617
-2014-03-18T05:45:14.330598+00:00 app[web.1]: websocket connection close
-2014-03-18T06:01:34+00:00 heroku[slug-compiler]: Slug compilation started
-2014-03-18T06:01:37+00:00 heroku[slug-compiler]: Slug compilation finished
-2014-03-18T06:01:38.102119+00:00 heroku[web.1]: State changed from up to starting
-2014-03-18T06:01:39.523500+00:00 heroku[web.1]: Starting process with command `node server.js`
-2014-03-18T06:01:40.480990+00:00 app[web.1]: http server listening on 54421
-2014-03-18T06:01:40.485583+00:00 app[web.1]: websocket server created
-2014-03-18T06:01:40.975531+00:00 heroku[web.1]: Stopping all processes with SIGTERM
-2014-03-18T06:01:40.899133+00:00 heroku[web.1]: State changed from starting to up
-2014-03-18T06:01:37.844129+00:00 heroku[api]: Deploy c920b73 by rjmcnama@mtu.edu
-2014-03-18T06:01:37.844209+00:00 heroku[api]: Release v5 created by rjmcnama@mtu.edu
-2014-03-18T06:01:42.329815+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=cf4f72d6-8ee6-4279-a537-ffc19e0ea176 fwd="24.13.173.22" dyno=web.1 connect=1ms service=13ms status=200 bytes=1132
-2014-03-18T06:01:42.496190+00:00 app[web.1]: started at: 1395122502495
-2014-03-18T06:01:42.982987+00:00 heroku[web.1]: Process exited with status 143
-2014-03-18T06:01:42.496558+00:00 app[web.1]: websocket connection open
-2014-03-18T06:01:43.547389+00:00 app[web.1]: got message from client at: 1395122503547
 2014-03-18T06:01:43.547389+00:00 app[web.1]: message was sent to client at: 1395122497712
 2014-03-18T06:01:44.547005+00:00 app[web.1]: got message from client at: 1395122504546
 2014-03-18T06:01:44.547005+00:00 app[web.1]: message was sent to client at: 1395122498712
@@ -99,3 +19,83 @@
 2014-03-18T06:01:52.560555+00:00 app[web.1]: message was sent to client at: 1395122506727
 2014-03-18T06:01:53.527368+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=68f5e497-1c74-4c05-ba34-15c0eaa711ea fwd="24.13.173.22" dyno=web.1 connect=1ms service=11040ms status=101 bytes=294
 2014-03-18T06:01:53.532240+00:00 app[web.1]: websocket connection close
+2014-03-18T06:07:42+00:00 heroku[slug-compiler]: Slug compilation started
+2014-03-18T06:07:49+00:00 heroku[slug-compiler]: Slug compilation finished
+2014-03-18T06:07:50.041939+00:00 heroku[web.1]: State changed from up to starting
+2014-03-18T06:07:51.499305+00:00 heroku[web.1]: Starting process with command `node server.js`
+2014-03-18T06:07:49.095576+00:00 heroku[api]: Deploy 70cc883 by rjmcnama@mtu.edu
+2014-03-18T06:07:49.095920+00:00 heroku[api]: Release v6 created by rjmcnama@mtu.edu
+2014-03-18T06:07:52.547652+00:00 app[web.1]: http server listening on 56628
+2014-03-18T06:07:52.553108+00:00 app[web.1]: websocket server created
+2014-03-18T06:07:53.707516+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=521cf7e8-b507-4041-a085-5caa829cbdce fwd="24.13.173.22" dyno=web.1 connect=0ms service=13ms status=200 bytes=1132
+2014-03-18T06:07:52.715904+00:00 heroku[web.1]: State changed from starting to up
+2014-03-18T06:07:52.876411+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2014-03-18T06:07:53.897657+00:00 app[web.1]: websocket connection open
+2014-03-18T06:07:54.898221+00:00 app[web.1]: send date to client
+2014-03-18T06:07:54.949500+00:00 app[web.1]: got response from client
+2014-03-18T06:07:54.786018+00:00 heroku[web.1]: Process exited with status 143
+2014-03-18T06:07:55.900375+00:00 app[web.1]: send date to client
+2014-03-18T06:07:55.948433+00:00 app[web.1]: got response from client
+2014-03-18T06:07:56.901118+00:00 app[web.1]: send date to client
+2014-03-18T06:07:56.955644+00:00 app[web.1]: got response from client
+2014-03-18T06:07:57.902938+00:00 app[web.1]: send date to client
+2014-03-18T06:07:57.951575+00:00 app[web.1]: got response from client
+2014-03-18T06:07:58.904905+00:00 app[web.1]: send date to client
+2014-03-18T06:07:58.951882+00:00 app[web.1]: got response from client
+2014-03-18T06:07:59.906150+00:00 app[web.1]: send date to client
+2014-03-18T06:07:59.956416+00:00 app[web.1]: got response from client
+2014-03-18T06:08:00.907226+00:00 app[web.1]: send date to client
+2014-03-18T06:08:00.952136+00:00 app[web.1]: got response from client
+2014-03-18T06:08:01.908872+00:00 app[web.1]: send date to client
+2014-03-18T06:08:01.960873+00:00 app[web.1]: got response from client
+2014-03-18T06:08:02.958695+00:00 app[web.1]: got response from client
+2014-03-18T06:08:02.909195+00:00 app[web.1]: send date to client
+2014-03-18T06:08:04.970329+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=c6140cb3-4b87-4d17-a302-3f42f6f08310 fwd="24.13.173.22" dyno=web.1 connect=0ms service=11083ms status=101 bytes=294
+2014-03-18T06:08:03.910904+00:00 app[web.1]: send date to client
+2014-03-18T06:08:03.957623+00:00 app[web.1]: got response from client
+2014-03-18T06:08:04.912015+00:00 app[web.1]: send date to client
+2014-03-18T06:08:04.960390+00:00 app[web.1]: got response from client
+2014-03-18T06:08:04.977205+00:00 app[web.1]: websocket connection close
+2014-03-18T06:09:56.967238+00:00 app[web.1]: websocket connection open
+2014-03-18T06:09:57.967618+00:00 app[web.1]: send date to client
+2014-03-18T06:09:58.017057+00:00 app[web.1]: got response from client
+2014-03-18T06:09:58.968506+00:00 app[web.1]: send date to client
+2014-03-18T06:09:59.018241+00:00 app[web.1]: got response from client
+2014-03-18T06:09:59.969629+00:00 app[web.1]: send date to client
+2014-03-18T06:10:00.017316+00:00 app[web.1]: got response from client
+2014-03-18T06:10:00.969688+00:00 app[web.1]: send date to client
+2014-03-18T06:10:01.026970+00:00 app[web.1]: got response from client
+2014-03-18T06:10:01.971683+00:00 app[web.1]: send date to client
+2014-03-18T06:10:02.022848+00:00 app[web.1]: got response from client
+2014-03-18T06:10:02.972217+00:00 app[web.1]: send date to client
+2014-03-18T06:10:03.023347+00:00 app[web.1]: got response from client
+2014-03-18T06:10:03.972708+00:00 app[web.1]: send date to client
+2014-03-18T06:10:04.022523+00:00 app[web.1]: got response from client
+2014-03-18T06:10:05.109423+00:00 heroku[router]: at=info method=GET path=/ host=node-snake.herokuapp.com request_id=21f4737a-2d6e-4e40-a4d7-19b2c2219c01 fwd="24.13.173.22" dyno=web.1 connect=2ms service=8153ms status=101 bytes=249
+2014-03-18T06:10:04.974051+00:00 app[web.1]: send date to client
+2014-03-18T06:10:05.023494+00:00 app[web.1]: got response from client
+2014-03-18T06:10:05.117298+00:00 app[web.1]: websocket connection close
+2014-03-18T06:11:13.226997+00:00 heroku[web.1]: State changed from up to starting
+2014-03-18T06:11:15.182442+00:00 heroku[web.1]: Starting process with command `node server.js`
+2014-03-18T06:11:14.681132+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2014-03-18T06:11:15.993328+00:00 heroku[web.1]: Process exited with status 143
+2014-03-18T06:11:16.333047+00:00 app[web.1]: http server listening on 55735
+2014-03-18T06:11:16.337606+00:00 app[web.1]: websocket server created
+2014-03-18T06:11:16.600255+00:00 heroku[web.1]: State changed from starting to up
+2014-03-18T06:12:18.045083+00:00 app[web.1]: websocket connection open
+2014-03-18T06:12:19.041550+00:00 app[web.1]: send date to client
+2014-03-18T06:12:19.093155+00:00 app[web.1]: got response from client
+2014-03-18T06:12:20.044818+00:00 app[web.1]: send date to client
+2014-03-18T06:12:20.094244+00:00 app[web.1]: got response from client
+2014-03-18T06:12:21.046375+00:00 app[web.1]: send date to client
+2014-03-18T06:12:21.095177+00:00 app[web.1]: got response from client
+2014-03-18T06:12:22.048339+00:00 app[web.1]: send date to client
+2014-03-18T06:12:22.100865+00:00 app[web.1]: got response from client
+2014-03-18T06:12:23.050951+00:00 app[web.1]: send date to client
+2014-03-18T06:12:23.099301+00:00 app[web.1]: got response from client
+2014-03-18T06:12:24.053088+00:00 app[web.1]: send date to client
+2014-03-18T06:12:24.097620+00:00 app[web.1]: got response from client
+2014-03-18T06:12:25.055768+00:00 app[web.1]: send date to client
+2014-03-18T06:12:25.103693+00:00 app[web.1]: got response from client
+2014-03-18T06:12:26.061284+00:00 app[web.1]: send date to client
+2014-03-18T06:12:26.107884+00:00 app[web.1]: got response from client
