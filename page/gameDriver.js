@@ -1,15 +1,26 @@
-function GameDriver(canvas){
+var networkManager;
 
-    this.networkManager = new NetworkManager();
+function GameDriver(canvas){
+    var that = this;
+    networkManager = new NetworkManager(function(){
+      networkManager.jsonSocket.sendJSON({name:"joinGame"});
+    });
+    this.input = new SnakeInput(canvas);
+
+    networkManager.listen("joinGame", function(obj){
+      that.boardData.initialize(obj);
+      that.localSnakeController = new LocalSnakeController(that.boardData.snakes[0], that.boardData);
+      that.startGame();
+    })
+    this.networkManager = networkManager;
 
     // give boarddata the network manager so it may update it as it sees fit
     this.boardData = new BoardModel(10,5, networkManager);
-    this.localSnake = this.boardData.addSnake();
-
-    this.localSnakeController = new LocalSnakeController(this.localSnake, this.boardData);
 
 
-    this.input = new SnakeInput(canvas);
+
+
+
 }
 
 GameDriver.prototype.gameLoop = function(){

@@ -28,6 +28,22 @@ LocalSnakeController.prototype.simulateFrame = function( inputs ){
     // add to make snake travel
     var pointToAdd = {x: frontPoint.x + dir.x, y: frontPoint.y + dir.y };
 
+    //correct x
+    while ( pointToAdd.x < -this.boardModel.xrad){
+      pointToAdd.x += this.boardModel.width;
+    }
+    while ( pointToAdd.x > this.boardModel.xrad){
+      pointToAdd.x -= this.boardModel.width;
+    }
+
+    //correct y
+    while ( pointToAdd.y < -this.boardModel.yrad){
+      pointToAdd.y += this.boardModel.height;
+    }
+    while ( pointToAdd.y > this.boardModel.yrad){
+      pointToAdd.y -= this.boardModel.height;
+    }
+
     this.snakeModel.points.push( pointToAdd );
     this.boardModel.notifyNetworkChange();
 

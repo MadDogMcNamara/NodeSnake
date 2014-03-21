@@ -32,7 +32,6 @@ BoardView.prototype.setRatio = function(width, height){
 }
 
 BoardView.prototype.drawBoard = function( boardData ){
-    console.debug(boardData);
 
     this.setRatio(boardData.xrad * 2 + 1, boardData.height );
 
@@ -71,5 +70,5 @@ window.addEventListener( "load", function onLoad() {
     //boardView.drawBoard( data );
 
     var driver = new GameDriver(canvas);
-    driver.startGame();
+    //driver.startGame();
 });

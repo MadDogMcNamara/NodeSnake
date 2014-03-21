@@ -1,9 +1,10 @@
 // handles network interactions for client
-function NetworkManager(){
+function NetworkManager(f){
     var that = this;
     var host = location.origin.replace(/^http/, 'ws')
     var connected = false;
     this.events = {};
+    this.id = -1;
 
     var ws = new WebSocket(host);
 
@@ -19,9 +20,16 @@ function NetworkManager(){
       }
     }
 
-    this.jsonSocket.onopen = function(){
-      that.connected = true;
-    };
+    this.jsonSocket.onopen = (function(g){
+      return function(){
+        that.connected = true;
+        g();
+      }
+    })(f);
+
+    this.listen("joinGame", function(event){
+      that.id = event.id;
+    });
 }
 
 NetworkManager.prototype.canSend = function(){
@@ -39,4 +47,3 @@ NetworkManager.prototype.listen = function(name, f){
   this.events[name].push(f);
 }
 
-var networkManager = new NetworkManager();

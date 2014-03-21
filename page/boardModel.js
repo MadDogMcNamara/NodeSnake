@@ -3,11 +3,32 @@ function BoardModel(xrad, yrad){
     this.yrad = yrad;
     this.width = xrad * 2 + 1;
     this.height = yrad * 2 + 1;
+    var that = this;
+    this.initialize();
+
+    networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake);});
+    networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
+}
+
+BoardModel.prototype.onPlayerQuit = function(obj){
+  for( var i = 0; i < this.snakes.length; i++ ){
+    var snake = this.snakes[i];
+    if ( obj.id === snake.id ){
+      this.snakes.splice(i,1);
+      i--;
+    }
+  }
+}
+
+BoardModel.prototype.initialize = function(obj){
     this.snakes = [];
     this.changesToDraw = false;
-    var that = this;
-    networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake); });
 
+    if ( obj && obj.snakes ){
+      for( var i = 0; i < obj.snakes.length; i++ ){
+        this.snakes[i] = new SnakeModel(obj.snakes[i]);
+      }
+    }
 }
 
 BoardModel.prototype.onChangedSnake = function(changedObject){
@@ -38,10 +59,9 @@ BoardModel.prototype.notifyNetworkChange = function(){
   this.notifyDrawChange();
 }
 
-
-BoardModel.prototype.addSnake = function(point){
-  point = point || [{x:0,y:0},{x:0,y:0},{x:0,y:0}];
-  var ret = new SnakeModel(point);
+BoardModel.prototype.addSnake = function(snake){
+  var ret = new SnakeModel(snake);
   this.snakes.push(ret);
   return ret;
 }
+

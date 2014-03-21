@@ -1,9 +1,8 @@
-function SnakeModel(point){
+function SnakeModel(oldSnake){
     this.color = "#0000FF";
     this.points = [];
-    if ( point && point.length ){
-      for ( var i = 0; i < point.length; i++){
-        this.points.push( point[i] )
-      }
+    if ( oldSnake ){
+      this.color = oldSnake.color || "#0000FF";
+      this.points = oldSnake.points || [];
     }
 }
