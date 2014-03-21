@@ -1,9 +1,10 @@
-# Node.js Websocket Test
+# Node Snake
 
-A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.
+Node.js backed multplayer snake. 
 
-# Running Locally
+Hosted on heroku at http://node-snake.herokuapp.com/
 
+# Running locally
 ``` bash
 npm install
 foreman start
