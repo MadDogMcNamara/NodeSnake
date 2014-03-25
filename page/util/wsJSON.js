@@ -1,4 +1,3 @@
-var asdfasdf = 3;
 
 {
   var root;
@@ -17,6 +16,7 @@ var asdfasdf = 3;
 
   root.getJSONWebSocket = function( socket ){
     var ret = Object.create(socket);
+    var listener = {};
 
     ret.sendJSON = function( obj, f ){
       var stringObj = JSON.stringify( obj );
@@ -26,12 +26,26 @@ var asdfasdf = 3;
       ret.send.apply(Object.getPrototypeOf(ret), [stringObj ]);
     }
 
-    ret.onJSONMessage = function(obj){};
+    ret.onJSONMessage = function(obj){
+      if ( obj.name ){
+        if ( listener[obj.name] ){
+          for ( var i = 0; i < listener[obj.name].length; i++ ){
+            listener[obj.name][i](obj);
+          }
+        }
+      }
+    }
 
     socket.onmessage = function(event){
       // extract json messsage
       var obj = JSON.parse(event.data);
       ret.onJSONMessage( obj );
+    }
+
+
+    socket.listen = function(name,f){
+      listener[name] = listener[name] || [];
+      listener[name].push(f);
     }
 
     return ret;

@@ -37,7 +37,6 @@ NetworkManager.prototype.canSend = function(){
 
 NetworkManager.prototype.sendChangedSnake = function(snake){
   if ( this.canSend() ){
-    console.log("changed my snake");
     this.jsonSocket.sendJSON( {name:"snakeChanged", "snake": snake} );
   }
 }
