@@ -32,6 +32,10 @@ BoardModel.prototype.initialize = function(obj){
 }
 
 BoardModel.prototype.onChangedSnake = function(changedObject){
+  if ( changedObject.id !== changedObject.snake.id ){
+    console.debug("disagrreeee");
+    console.debug(this);
+  }
   var snake = changedObject.snake;
   var i;
   for (i = 0; i < this.snakes.length; i++){

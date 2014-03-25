@@ -1,13 +1,12 @@
 // handles network interactions for client
 function NetworkManager(f){
     var that = this;
-    var host = location.origin.replace(/^http/, 'ws')
+    var host = location.origin.replace(/^http(s)?/, 'ws')
     var connected = false;
     this.events = {};
     this.id = -1;
 
     var ws = new WebSocket(host);
-
 
     this.jsonSocket = getJSONWebSocket(ws);
     this.jsonSocket.onJSONMessage = function(obj){

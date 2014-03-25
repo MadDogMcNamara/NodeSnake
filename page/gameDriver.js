@@ -11,23 +11,22 @@ function GameDriver(canvas){
       that.boardData.initialize(obj);
       that.localSnakeController = new LocalSnakeController(that.boardData.snakes[0], that.boardData);
       that.startGame();
-    })
+    });
+
+    networkManager.listen("collision", function(obj){
+      that.boardData.snakes[0].points = obj.snake.points;
+      that.boardData.snakes[0].direction = 0;
+    });
     this.networkManager = networkManager;
 
     // give boarddata the network manager so it may update it as it sees fit
-    this.boardData = new BoardModel(10,5, networkManager);
-
-
-
-
-
+    this.boardData = new BoardModel(20,10, networkManager);
 }
 
 GameDriver.prototype.gameLoop = function(){
+    console.debug(this);
     var input = this.input.getInputs();
     this.localSnakeController.simulateFrame(input);
-    var that = this;
-    //setTimeout(function(){that.gameLoop()},100);
 }
 
 
