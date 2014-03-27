@@ -24,7 +24,6 @@ function GameDriver(canvas){
 }
 
 GameDriver.prototype.gameLoop = function(){
-    console.debug(this);
     var input = this.input.getInputs();
     this.localSnakeController.simulateFrame(input);
 }
@@ -34,6 +33,6 @@ GameDriver.prototype.startGame = function(){
     var that = this;
     setInterval(function(){
         that.gameLoop();
-    }, 170);
+    }, 150);
     this.gameLoop();
 }

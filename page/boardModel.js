@@ -1,13 +1,32 @@
 function BoardModel(xrad, yrad){
-    this.xrad = xrad;
-    this.yrad = yrad;
-    this.width = xrad * 2 + 1;
-    this.height = yrad * 2 + 1;
     var that = this;
     this.initialize();
+    this.apples = [];
 
     networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake);});
     networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
+    networkManager.listen("newApple", function(obj){ that.newApple(obj); });
+    networkManager.listen("removeApple", function(obj){ that.removeApple(obj)});
+}
+
+BoardModel.prototype.newApple = function(obj){
+  this.apples.push(obj.location);
+}
+
+BoardModel.prototype.removeApple = function(obj){
+  for ( var i = 0; i < this.apples.length; i++ ){
+    if ( (this.apples[i].x === obj.location.x) && (this.apples[i].y === obj.location.y )){
+      this.apples.splice(i,1);
+      break;
+    }
+  }
+}
+
+BoardModel.prototype.setSize = function(xrad, yrad){
+    this.xrad = xrad || 10;
+    this.yrad = yrad || 5;
+    this.width = this.xrad * 2 + 1;
+    this.height = this.yrad * 2 + 1;
 }
 
 BoardModel.prototype.onPlayerQuit = function(obj){
@@ -23,6 +42,10 @@ BoardModel.prototype.onPlayerQuit = function(obj){
 BoardModel.prototype.initialize = function(obj){
     this.snakes = [];
     this.changesToDraw = false;
+    if ( obj ){
+      this.setSize(obj.board.xrad, obj.board.yrad);
+      this.apples = obj.apples;
+    }
 
     if ( obj && obj.snakes ){
       for( var i = 0; i < obj.snakes.length; i++ ){
@@ -32,10 +55,6 @@ BoardModel.prototype.initialize = function(obj){
 }
 
 BoardModel.prototype.onChangedSnake = function(changedObject){
-  if ( changedObject.id !== changedObject.snake.id ){
-    console.debug("disagrreeee");
-    console.debug(this);
-  }
   var snake = changedObject.snake;
   var i;
   for (i = 0; i < this.snakes.length; i++){

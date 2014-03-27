@@ -3,6 +3,9 @@ function LocalSnakeController(snake, boardModel){
     this.snakeModel = snake;
     this.boardModel = boardModel;
     this.snakeModel.direction = this.snakeModel.direction || 0;
+    this.queuedApples = 0;
+    var that = this;
+    networkManager.listen("ateApple", function(){that.queuedApples++});
 }
 
 
@@ -23,7 +26,13 @@ LocalSnakeController.prototype.simulateFrame = function( inputs ){
     var frontPoint = this.snakeModel.points[this.snakeModel.points.length-1];
 
     // remove rear of snake
-    this.snakeModel.points.shift();
+    if ( this.queuedApples === 0 ){
+      this.snakeModel.points.shift();
+    }
+    else{
+      this.queuedApples--;
+    }
+
 
     // add to make snake travel
     var pointToAdd = {x: frontPoint.x + dir.x, y: frontPoint.y + dir.y };

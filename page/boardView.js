@@ -31,31 +31,45 @@ BoardView.prototype.setRatio = function(width, height){
 
 }
 
-BoardView.prototype.drawBoard = function( boardData ){
-
-    this.setRatio(boardData.xrad * 2 + 1, boardData.height );
-
-    var ctx = this.canvas.getContext("2d");
-    ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
+BoardView.prototype.drawCell = function( ctx, boardData, point, padRatio ){
+    var cellSize = this.canvas.width / ( boardData.width );
+    var cellPad = padRatio * cellSize;
 
     var left = -boardData.xrad;
     var top = -boardData.yrad;
 
-    var cellSize = this.canvas.width / ( boardData.width );
-    var cellPad = cellSize / 20;
+    var x = point.x - left;
+    var y = point.y - top;
 
+    ctx.fillRect( x * cellSize + cellPad, y * cellSize + cellPad, cellSize - 2 * cellPad, cellSize - 2 * cellPad );
+
+
+}
+
+BoardView.prototype.drawBoard = function( boardData ){
+
+    this.setRatio(boardData.width, boardData.height );
+
+    var ctx = this.canvas.getContext("2d");
+    ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
+
+
+    var cellPad = 1.0 / 4;
+
+    for ( var i = 0; i < boardData.apples.length; i++ ){
+      ctx.fillStyle = "#00FF00";
+      this.drawCell(ctx, boardData, boardData.apples[i], cellPad);
+    }
+    cellPad = 1.0/30;
+    cellPadMax = 1.0 / 4;
     for ( var i = 0; i < boardData.snakes.length; i++ ){
-        var snake = boardData.snakes[i];
+      var snake = boardData.snakes[i];
+      ctx.fillStyle = snake.color;
 
-        ctx.fillStyle = snake.color;
-
-        for ( var j = 0; j < snake.points.length; j++ ){
-            var point = snake.points[j];
-            var x = point.x - left;
-            var y = point.y - top;
-
-            ctx.fillRect( x * cellSize + cellPad, y * cellSize + cellPad, cellSize - 2 * cellPad, cellSize - 2 * cellPad );
-        }
+      for ( var j = 0; j < snake.points.length; j++ ){
+        var currPad = cellPad + (snake.points.length - j -1) / (snake.points.length) * (cellPadMax - cellPad);
+        this.drawCell(ctx, boardData, snake.points[j], currPad);
+      }
     }
 }
 

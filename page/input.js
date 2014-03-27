@@ -13,6 +13,10 @@ function SnakeInput(){
             this.inputs.push(code);
         }
     }).apply(that, [event])});
+
+    networkManager.listen("collision", function(){
+      that.inputs.splice(0,that.inputs.length);
+    });
 }
 
 SnakeInput.prototype.getInputs = function(){
