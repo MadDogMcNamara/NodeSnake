@@ -59,6 +59,10 @@ SnakeConnection = function(socket, id, others, boardData){
     for ( var i = 0; i < this.connections.length; i++ ){
       this.connections[i].jsonws.sendJSON( message );
     }
+
+    // tell snake spawner player left
+    this.boardData.appleSpawner.playerLeft();
+
   }).apply(that);});
 
 

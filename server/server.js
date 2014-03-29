@@ -16,7 +16,7 @@ server.listen(port);
 
 console.log('http server listening on %d', port);
 
-var wss = new WebSocketServer({server: server});
+var wss = new WebSocketServer({server: server, path:"/snakews/"});
 console.log('websocket server created');
 
 var nextID = 0;

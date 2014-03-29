@@ -1,7 +1,7 @@
 // handles network interactions for client
 function NetworkManager(f){
     var that = this;
-    var host = location.origin.replace(/^http(s)?/, 'ws')
+    var host = location.origin.replace(/^http(s)?/, 'ws') + "/snakews/"
     var connected = false;
     this.events = {};
     this.id = -1;
