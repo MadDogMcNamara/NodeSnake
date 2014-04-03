@@ -1,7 +1,6 @@
 function BoardView( canvas )
 {
     this.canvas = canvas;
-
 }
 
 
@@ -29,6 +28,9 @@ BoardView.prototype.setRatio = function(width, height){
         this.canvas.height = 1 / ( r / this.canvas.width );
     }
 
+    this.canvas.style.top = (maxHeight - this.canvas.height)/2;
+    this.canvas.style.left = (maxWidth - this.canvas.width)/2;
+
 }
 
 BoardView.prototype.drawCell = function( ctx, boardData, point, padRatio ){
@@ -47,11 +49,12 @@ BoardView.prototype.drawCell = function( ctx, boardData, point, padRatio ){
 }
 
 BoardView.prototype.drawBoard = function( boardData ){
-
     this.setRatio(boardData.width, boardData.height );
 
     var ctx = this.canvas.getContext("2d");
     ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
+    ctx.fillStyle = "#000000";
+    ctx.fillRect( 0, 0, this.canvas.width, this.canvas.height );
 
 
     var cellPad = 1.0 / 4;
@@ -70,6 +73,12 @@ BoardView.prototype.drawBoard = function( boardData ){
         var currPad = cellPad + (snake.points.length - j -1) / (snake.points.length) * (cellPadMax - cellPad);
         this.drawCell(ctx, boardData, snake.points[j], currPad);
       }
+    }
+
+    ctx.fillStyle = "#FFFFFF";
+    for ( var i = 0; i < boardData.respawns.length; i++ ){
+      var respawn = boardData.respawns[i];
+      this.drawCell(ctx, boardData, respawn.snake.points[0], cellPad);
     }
 }
 

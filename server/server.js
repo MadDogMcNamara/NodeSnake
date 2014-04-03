@@ -21,6 +21,7 @@ console.log('websocket server created');
 
 var nextID = 0;
 var connections = [];
+var unusedConnections = [];
 
 
 var boardData = {xrad:20, yrad:10};
@@ -45,9 +46,17 @@ wss.on('connection', function(ws) {
 
   jsonws.listen("joinGame", function(event){
     // request to join, fulfill immediately
-    connection = new SnakeConnection(jsonws, nextID, connections, boardData);
+    var id;
+    if (unusedConnections.length > 0){
+      id = unusedConnections[0];
+      unusedConnections.shift();
+    }
+    else{
+      id = nextID;
+      nextID++;
+    }
+    connection = new SnakeConnection(jsonws, id, connections, boardData, unusedConnections);
     appleFactory.playerJoined();
-    nextID++;
   });
 
 });

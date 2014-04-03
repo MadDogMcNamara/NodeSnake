@@ -4,12 +4,15 @@ function LocalSnakeController(snake, boardModel){
     this.boardModel = boardModel;
     this.snakeModel.direction = this.snakeModel.direction || 0;
     this.queuedApples = 0;
+    this.freeze = false;
     var that = this;
     networkManager.listen("ateApple", function(){that.queuedApples++});
 }
 
 
 LocalSnakeController.prototype.simulateFrame = function( inputs ){
+    if ( this.freeze ) return;
+    if ( this.snakeModel.points.length === 0 ) return;
     while ( inputs.length > 0 ){
         var headInput = inputs.shift();
 

@@ -2,6 +2,7 @@
     <head>
         <script src="util/constants.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
         <script src="lib/jquery.easing.1.3.js" ></script>
         <script src="lib/jquery.animate-colors-min.js" ></script>
         <script src="/util/mod.js" ></script>
@@ -13,10 +14,19 @@
         <script src="/localSnakeController.js"></script>
         <script src="/gameDriver.js"></script>
         <script src="/input.js"></script>
+        <script src="/countdownView.js"></script>
 
         <link rel="stylesheet" href="index.css"></link>
     </head>
     <body>
+        <div class="noDim">
         <canvas id="boardCanvas" ></canvas>
+        </div>
+        <div class="noDim">
+            <div class="countdownTextWrapper">
+            <div class="countdownText">234</div>
+                                      </div>
+        </div>
+
     </body>
 </html>

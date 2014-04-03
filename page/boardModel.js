@@ -2,7 +2,7 @@ function BoardModel(xrad, yrad){
     var that = this;
     this.initialize();
     this.apples = [];
-
+    this.respawns = [];
     networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake);});
     networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
     networkManager.listen("newApple", function(obj){ that.newApple(obj); });
@@ -54,6 +54,12 @@ BoardModel.prototype.initialize = function(obj){
     }
 }
 
+BoardModel.prototype.respawnLocal = function(obj){
+  this.snakes[0].points = obj.snake.points;
+  this.snakes[0].color = obj.snake.color;
+  this.snakes[0].id = obj.snake.id;
+}
+
 BoardModel.prototype.onChangedSnake = function(changedObject){
   var snake = changedObject.snake;
   var i;
@@ -88,3 +94,12 @@ BoardModel.prototype.addSnake = function(snake){
   return ret;
 }
 
+BoardModel.prototype.addRespawn = function(respawn){
+  var that = this;
+  if ( respawn.snake && respawn.time ){
+    this.respawns.push(respawn);
+    setTimeout(function(){
+      that.respawns.shift(that.respawns.indexOf(respawn));
+    }, respawn.time.getTime() - new Date().getTime() );
+  }
+}

@@ -1,6 +1,38 @@
 #boardCanvas
 {
+    position:absolute;
     border-style:solid;
     border-color:black;
     border-width:2px;
+}
+
+*
+{
+  margin:0;
+  padding:0;
+}
+
+div.noDim
+{
+  display:table;
+  width:0px;
+  height:0px;
+}
+
+div.countdownTextWrapper
+{
+  position:absolute;
+  top:100px;
+}
+
+div.countdownText
+{
+  font-family:arial;
+  font-size:20pt;
+  display:table-cell;
+  color:white;
+  vertical-align:middle;
+  text-align:center;
+  width:600px;
+  height:600px;
 }

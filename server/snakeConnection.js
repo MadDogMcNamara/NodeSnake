@@ -1,9 +1,10 @@
 var root = module.exports;
 var mod = require("../page/util/mod.js");
-
+var respawnTime = 3000;
 var startingLength = 1;
 
-SnakeConnection = function(socket, id, others, boardData){
+SnakeConnection = function(socket, id, others, boardData, unusedConnections){
+  this.unusedConnections = unusedConnections;
   this.thisListen = function(name, f){
     var that = this;
     this.jsonws.listen(name, function(event){ f.apply(that, [event]); });
@@ -27,22 +28,20 @@ SnakeConnection = function(socket, id, others, boardData){
   event.board = {xrad:this.boardData.xrad, yrad:this.boardData.yrad};
 
   // respond with initial snake
-  event.snakes = [];
+  event.snakes = [{id:event.id, points:[]}];
   event.apples = this.boardData.appleList;
-
-  var newSnake = {color:this.getRandomColor(this.id)};
-  newSnake.points = this.getStartingPoints(this.id);
-  newSnake.id = this.id;
-
-  event.snakes[0] = newSnake;
-  this.snake = newSnake;
 
   console.log("letting " + this.id + " join");
 
   this.jsonws.sendJSON(event);
   // end send join
 
+  // send respawn
+  this.sendRespawn();
+
   this.jsonws.on('close', function(){(function() {
+    this.unusedConnections.push(this.id);
+
     // remove from connections
     for ( var i = 0; i < this.connections.length; i++ ){
       var checkConnection = this.connections[i];
@@ -94,9 +93,11 @@ SnakeConnection = function(socket, id, others, boardData){
     for ( var i = 0; i < this.connections.length; i++ ){
       if( ( deaths[this.connections[i].id] || false ) ){
         // notify about death
-        this.connections[i].snake.points = this.connections[i].getStartingPoints();
+        // delete points so snake is invisible
+        this.connections[i].snake.points = [];
         var msg = {name:"collision", snake:this.connections[i].snake};
         this.connections[i].jsonws.sendJSON( msg );
+        this.connections[i].sendRespawn();
 
         // notify others about changed
         for ( var j = 0; j < this.connections.length; j++ ){
@@ -132,6 +133,18 @@ SnakeConnection = function(socket, id, others, boardData){
     }
   });
 
+}
+
+SnakeConnection.prototype.sendRespawn = function(){
+  var event = {name:"respawn"};
+  var newSnake = {color:this.getRandomColor(this.id)};
+  newSnake.points = this.getStartingPoints(this.id);
+  newSnake.id = this.id;
+
+  this.snake = newSnake;
+  event.snake = this.snake;
+  event.time = new Date(new Date().getTime() + respawnTime).getTime();
+  this.jsonws.sendJSON(event);
 }
 
 SnakeConnection.prototype.getStartingPoints = function(){
@@ -172,13 +185,30 @@ SnakeConnection.prototype.notifyAteApple = function(point){
 
 
 SnakeConnection.prototype.getRandomColor = function(){
+  var randomNum;
+
+  // pie slices strat for max color distinguishability
+  if ( this.id === 0 ){
+    randomNum = 0;
+  }
+  else{
+    var k = Math.floor(Math.log(this.id) / Math.log(2));
+    var l = 1 << k;
+    var r = this.id - l;
+    randomNum = (1 + 2 * r) / (2 * l);
+    randomNum *= 360;
+  }
+
+
+  // old color gen
+  /*
   var id = this.id;
   var p = 31;
   var x = 234;
 
   var randomNum = mod.expmod(x,id + 2,p);
 
-  randomNum = randomNum / p * 360;
+  randomNum = randomNum / p * 360;*/
 
   var rgbColor = HSBToRGB({h:randomNum, s:100, b:100});
   rgbColor = ((rgbColor.r << 16) + (rgbColor.g << 8) + rgbColor.b).toString(16);
