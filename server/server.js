@@ -56,7 +56,6 @@ wss.on('connection', function(ws) {
       nextID++;
     }
     connection = new SnakeConnection(jsonws, id, connections, boardData, unusedConnections);
-    appleFactory.playerJoined();
   });
 
 });

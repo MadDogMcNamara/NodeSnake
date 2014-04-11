@@ -1,9 +1,11 @@
 var root = module.exports;
 var mod = require("../page/util/mod.js");
-var respawnTime = 3000;
+var respawnTime = 2000;
+var invincibleTime = 4000;
 var startingLength = 1;
 
 SnakeConnection = function(socket, id, others, boardData, unusedConnections){
+  this.state = "dead";
   this.unusedConnections = unusedConnections;
   this.thisListen = function(name, f){
     var that = this;
@@ -15,6 +17,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
   this.id = id;
   this.boardData = boardData;
   var that = this;
+  this.lastSpawn = null;
 
 
   this.connections.push(this);
@@ -34,10 +37,8 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
   console.log("letting " + this.id + " join");
 
   this.jsonws.sendJSON(event);
+  this.snake = {id:this.id, points:[], color:"#FFFFFF"};
   // end send join
-
-  // send respawn
-  this.sendRespawn();
 
   this.jsonws.on('close', function(){(function() {
     this.unusedConnections.push(this.id);
@@ -59,9 +60,10 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
       this.connections[i].jsonws.sendJSON( message );
     }
 
-    // tell snake spawner player left
-    this.boardData.appleSpawner.playerLeft();
-
+    if ( this.state === "alive" ){
+      // tell snake spawner player left
+      this.boardData.appleSpawner.playerLeft();
+    }
   }).apply(that);});
 
 
@@ -80,10 +82,14 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
       for ( var j = 0; j < (otherPoints.length - ((this.id === this.connections[i].id) ? 1 : 0 )); j++){
         var body = otherPoints[j];
         if ( body.x === head.x && body.y === head.y ){
-          deaths[this.id] = 1;
+          if ( !this.isInvincible() ){
+            deaths[this.id] = 1;
+          }
           if ( j === otherPoints.length - 1 ){
             // they died too
-            deaths[this.connections[i].id] = 1;
+            if ( !this.connections[i].isInvincible() ){
+              deaths[this.connections[i].id] = 1;
+            }
           }
         }
       }
@@ -95,9 +101,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
         // notify about death
         // delete points so snake is invisible
         this.connections[i].snake.points = [];
-        var msg = {name:"collision", snake:this.connections[i].snake};
-        this.connections[i].jsonws.sendJSON( msg );
-        this.connections[i].sendRespawn();
+        this.connections[i].notifyDeath();
 
         // notify others about changed
         for ( var j = 0; j < this.connections.length; j++ ){
@@ -132,10 +136,16 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
       this.connections[i].notifySnakeChange(this);
     }
   });
+  this.thisListen("requestRespawn", function(){
+    this.sendRespawn();
+  });
 
 }
 
 SnakeConnection.prototype.sendRespawn = function(){
+  this.state = "alive";
+  this.boardData.appleSpawner.playerJoined();
+  console.log("respawnin");
   var event = {name:"respawn"};
   var newSnake = {color:this.getRandomColor(this.id)};
   newSnake.points = this.getStartingPoints(this.id);
@@ -143,8 +153,16 @@ SnakeConnection.prototype.sendRespawn = function(){
 
   this.snake = newSnake;
   event.snake = this.snake;
-  event.time = new Date(new Date().getTime() + respawnTime).getTime();
-  this.jsonws.sendJSON(event);
+  event.time = respawnTime;
+  this.lastSpawn = new Date();
+  // send to all the connections
+  for ( var i = 0; i < this.connections.length; i++ ){
+    event.mine = (this.connections[i] === this);
+    this.connections[i].jsonws.sendJSON(event);
+  }
+
+  // clear points until player moves again
+  this.snake.points = [];
 }
 
 SnakeConnection.prototype.getStartingPoints = function(){
@@ -155,6 +173,10 @@ SnakeConnection.prototype.getStartingPoints = function(){
   }
   res.push({x:1,y:x});
   return res;
+}
+
+SnakeConnection.prototype.isInvincible = function(){
+  return ( this.lastSpawn && (new Date().getTime() - this.lastSpawn < invincibleTime) );
 }
 
 SnakeConnection.prototype.notifySnakeChange = function(otherConnection){
@@ -182,6 +204,15 @@ SnakeConnection.prototype.notifyAteApple = function(point){
   msg.location = point;
   this.jsonws.sendJSON( msg );
 }
+
+SnakeConnection.prototype.notifyDeath = function(){
+  this.boardData.appleSpawner.playerLeft();
+  this.state = "dead";
+  var msg = {name:"collision", snake:this.snake};
+  this.jsonws.sendJSON( msg );
+}
+
+
 
 
 SnakeConnection.prototype.getRandomColor = function(){

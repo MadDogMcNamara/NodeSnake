@@ -3,7 +3,7 @@ function CountdownView(){
   var wrapper = $("div.countdownTextWrapper");
 
   function setNumber(num, time, f){
-    textDiv[0].innerText = "" + num;
+    textDiv[0].innerText = "" + ((num == 0) ? "GO" : num);
     textDiv[0].style.fontSize = "400pt";
     textDiv.animate({"font-size":"90pt"},{duration:time,easing:"easeOutExpo", done:f});
   }
@@ -26,7 +26,7 @@ function CountdownView(){
   function countdownFrom(i){
     center();
     show();
-    if ( i <= 0 ){
+    if ( i <= 1 ){
       hide();
       return;
     }
@@ -35,7 +35,8 @@ function CountdownView(){
     if ( i > Math.floor(i) ){
       time = (i - Math.floor(i)) / 2 * 1000;
       display = Math.ceil(display);
-    }
+   }
+
 
     setNumber(display, time, function(){ countdownFrom(display); });
   }
@@ -56,7 +57,3 @@ CountdownView.prototype.countdownFromDate = function(date){
 
 }
 
-var countdownView;
-window.addEventListener( "load", function onLoad(){
-  countdownView = new CountdownView();
-});

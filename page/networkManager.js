@@ -40,6 +40,11 @@ NetworkManager.prototype.sendChangedSnake = function(snake){
     this.jsonSocket.sendJSON( {name:"snakeChanged", "snake": snake} );
   }
 }
+NetworkManager.prototype.requestRespawn = function(){
+  if ( this.canSend() ){
+    this.jsonSocket.sendJSON( {name:"requestRespawn"} );
+  }
+}
 
 NetworkManager.prototype.listen = function(name, f){
   this.events[name] = this.events[name] || [];

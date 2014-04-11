@@ -15,8 +15,8 @@ BoardView.prototype.setRatio = function(width, height){
     var marginRight = parseInt(getStyle(document.body, "margin-right"), 10);
     var marginBottom = parseInt(getStyle(document.body, "margin-bottom"), 10);
     var marginTop = parseInt(getStyle(document.body, "margin-top"), 10);
-    var maxWidth = document.body.clientWidth - ( marginLeft + marginRight ) - 4; // 4 for border
-    var maxHeight = document.body.clientHeight - ( marginTop + marginBottom ) - 4; // 4 for border
+    var maxWidth = document.body.clientWidth - ( marginLeft + marginRight ); // 4 for border
+    var maxHeight = document.body.clientHeight - ( marginTop + marginBottom ); // 4 for border
 
 
     if ( r <= maxWidth / maxHeight ){
@@ -49,6 +49,7 @@ BoardView.prototype.drawCell = function( ctx, boardData, point, padRatio ){
 }
 
 BoardView.prototype.drawBoard = function( boardData ){
+
     this.setRatio(boardData.width, boardData.height );
 
     var ctx = this.canvas.getContext("2d");
@@ -75,23 +76,41 @@ BoardView.prototype.drawBoard = function( boardData ){
       }
     }
 
-    ctx.fillStyle = "#FFFFFF";
+    var respawnAnimationTime = 500;
+    var respawnAnimationDistance = 10;
+
     for ( var i = 0; i < boardData.respawns.length; i++ ){
       var respawn = boardData.respawns[i];
-      this.drawCell(ctx, boardData, respawn.snake.points[0], cellPad);
+
+      var head = respawn.snake.points[respawn.snake.points.length - 1];
+      ctx.fillStyle = respawn.snake.color;
+
+      var timeUntil = respawn.time.getTime() - new Date().getTime();
+      var dist = Math.floor(timeUntil / respawnAnimationTime * respawnAnimationDistance);
+      dist++;
+      if ( timeUntil <= respawnAnimationTime && dist >= 0 ){
+        var perimeter = (dist * 2 + 2) * (dist * 2 + 2) - (4 * dist * dist);
+        var sideLen = dist * 2 + 1;
+        var x = -dist + head.x;
+        var y = -dist + head.y;
+        for ( var j = 0; j < perimeter; j++ ){
+          this.drawCell(ctx, boardData, {x:x, y:y}, cellPad);
+          if ( j < sideLen - 1 ){
+            x++;
+          }
+          else if ( j < ( sideLen - 1 ) * 2 ){
+            y++;
+          }
+          else if ( j < ( sideLen - 1 ) * 3 ){
+            x--;
+          }
+          else if ( j < ( sideLen - 1 ) * 4 ){
+            y--;
+          }
+        }
+      }
     }
 }
 
 
 var boardView;
-
-window.addEventListener( "load", function onLoad() {
-    var canvas = $("#boardCanvas")[0];
-
-
-    boardView = new BoardView(canvas);
-    //boardView.drawBoard( data );
-
-    var driver = new GameDriver(canvas);
-    //driver.startGame();
-});

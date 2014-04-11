@@ -15,17 +15,28 @@
         <script src="/gameDriver.js"></script>
         <script src="/input.js"></script>
         <script src="/countdownView.js"></script>
+        <script src="/pageManager.js"></script>
+        <script src="/inactiveMenuView.js"></script>
 
         <link rel="stylesheet" href="index.css"></link>
     </head>
     <body>
         <div class="noDim">
-        <canvas id="boardCanvas" ></canvas>
+            <canvas id="boardCanvas" ></canvas>
         </div>
         <div class="noDim">
             <div class="countdownTextWrapper">
-            <div class="countdownText">234</div>
-                                      </div>
+                <div class="countdownText"></div>
+            </div>
+        </div>
+        <div class="noDim">
+            <div class="inactiveMenuWrapper">
+                <div>
+                    <p>Node Snake</p>
+                    <p>Arrow keys to move</p>
+                    <input type="button" value="Spawn!"></input>
+                </div>
+            </div>
         </div>
 
     </body>
