@@ -68,7 +68,10 @@ BoardModel.prototype.onChangedSnake = function(changedObject){
       break;
     }
   }
-  this.snakes[i] = snake;
+  if ( this.snakes.length <= i ){
+    this.snakes[i] = new SnakeModel(changedObject.snake);
+  }
+  this.snakes[i].update(changedObject);
   this.notifyDrawChange();
 }
 

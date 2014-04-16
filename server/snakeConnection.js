@@ -3,6 +3,7 @@ var mod = require("../page/util/mod.js");
 var respawnTime = 2000;
 var invincibleTime = 4000;
 var startingLength = 1;
+var SnakeModel = require("../page/snakeModel.js").SnakeModel;
 
 SnakeConnection = function(socket, id, others, boardData, unusedConnections){
   this.state = "dead";
@@ -37,7 +38,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
   console.log("letting " + this.id + " join");
 
   this.jsonws.sendJSON(event);
-  this.snake = {id:this.id, points:[], color:"#FFFFFF"};
+  this.snake = new SnakeModel({id:this.id, points:[], color:"#FFFFFF"});
   // end send join
 
   this.jsonws.on('close', function(){(function() {
@@ -71,8 +72,9 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
 
   this.thisListen( "snakeChanged", function(event){
     // send to all other connections
-    this.snake = event.snake;
+    this.snake.update(event);
     this.snake.id = this.id;
+    this.snake.resetDelta();
 
     // check for collision
     var head = this.snake.points[this.snake.points.length - 1];
@@ -95,6 +97,12 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
       }
     }
 
+    // notify others of changed snake
+    for ( var i = 0; i < this.connections.length; i++){
+      if ( this.connections[i].id === this.id ) continue;
+      this.connections[i].notifySnakeChange(this, event);
+    }
+
     // go through all connections, notify the dead
     for ( var i = 0; i < this.connections.length; i++ ){
       if( ( deaths[this.connections[i].id] || false ) ){
@@ -106,7 +114,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
         // notify others about changed
         for ( var j = 0; j < this.connections.length; j++ ){
           if ( this.connections[j].id === this.connections[i].id ) continue;
-          this.connections[j].notifySnakeChange(this.connections[i]);
+          this.connections[j].notifyOtherSnakeDeath(this.connections[i]);
         }
       }
     }
@@ -130,11 +138,6 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
 
     this.boardData.appleSpawner.fillApples();
 
-    // notify others of changed snake
-    for ( var i = 0; i < this.connections.length; i++){
-      if ( this.connections[i].id === this.id ) continue;
-      this.connections[i].notifySnakeChange(this);
-    }
   });
   this.thisListen("requestRespawn", function(){
     this.sendRespawn();
@@ -151,7 +154,7 @@ SnakeConnection.prototype.sendRespawn = function(){
   newSnake.points = this.getStartingPoints(this.id);
   newSnake.id = this.id;
 
-  this.snake = newSnake;
+  this.snake = new SnakeModel(newSnake);
   event.snake = this.snake;
   event.time = respawnTime;
   this.lastSpawn = new Date();
@@ -179,9 +182,15 @@ SnakeConnection.prototype.isInvincible = function(){
   return ( this.lastSpawn && (new Date().getTime() - this.lastSpawn < invincibleTime) );
 }
 
-SnakeConnection.prototype.notifySnakeChange = function(otherConnection){
+SnakeConnection.prototype.notifySnakeChange = function(otherConnection, delta){
   otherConnection.snake.id = otherConnection.id;
-  var msg = {name:"snakeChanged", snake:otherConnection.snake};
+  var msg = delta;
+  this.jsonws.sendJSON(msg);
+}
+
+SnakeConnection.prototype.notifyOtherSnakeDeath = function(otherConnection){
+  otherConnection.snake.id = otherConnection.id;
+  var msg = {name:"snakeChanged", death:true, id:otherConnection.id, snake:{id:otherConnection.id, color:otherConnection.snake.color}};
   this.jsonws.sendJSON(msg);
 }
 
@@ -191,13 +200,11 @@ SnakeConnection.prototype.notifyNewApple = function(point){
   this.jsonws.sendJSON( msg );
 }
 
-
 SnakeConnection.prototype.notifyRemoveApple = function(point){
   var msg = {name:"removeApple"};
   msg.location = point;
   this.jsonws.sendJSON( msg );
 }
-
 
 SnakeConnection.prototype.notifyAteApple = function(point){
   var msg = {name:"ateApple"};

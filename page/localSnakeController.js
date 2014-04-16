@@ -30,7 +30,7 @@ LocalSnakeController.prototype.simulateFrame = function( inputs ){
 
     // remove rear of snake
     if ( this.queuedApples === 0 ){
-      this.snakeModel.points.shift();
+      this.snakeModel.removePoint(this.snakeModel.points[0]);
     }
     else{
       this.queuedApples--;
@@ -55,8 +55,7 @@ LocalSnakeController.prototype.simulateFrame = function( inputs ){
     while ( pointToAdd.y > this.boardModel.yrad){
       pointToAdd.y -= this.boardModel.height;
     }
-
-    this.snakeModel.points.push( pointToAdd );
+    this.snakeModel.addPoint(pointToAdd);
     this.boardModel.notifyNetworkChange();
 
 }

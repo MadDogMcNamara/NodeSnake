@@ -37,9 +37,14 @@ NetworkManager.prototype.canSend = function(){
 
 NetworkManager.prototype.sendChangedSnake = function(snake){
   if ( this.canSend() ){
-    this.jsonSocket.sendJSON( {name:"snakeChanged", "snake": snake} );
+    var sendSnake = {id:snake.id, color:snake.color};
+    sendSnake.delta = snake.getDiffSinceLastQuery();
+    var obj = {name:"snakeChanged", diff:true, "snake":sendSnake};
+
+    this.jsonSocket.sendJSON( obj );
   }
 }
+
 NetworkManager.prototype.requestRespawn = function(){
   if ( this.canSend() ){
     this.jsonSocket.sendJSON( {name:"requestRespawn"} );
