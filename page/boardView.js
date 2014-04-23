@@ -244,10 +244,11 @@ BoardView.prototype.getDrawCy = function() {
 }
 
 BoardView.prototype.getDrawXrad = function() {
-  if ( this.boardData.xrad <= 25 ){
+  var max = 40;
+  if ( this.boardData.xrad <= max ){
     return this.boardData.xrad;
   }
-  return 25;
+  return max;
 }
 
 BoardView.prototype.getDrawYrad = function() {
@@ -262,15 +263,6 @@ BoardView.prototype.drawBoard = function(){
     ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
     ctx.fillStyle = "#000000";
     ctx.fillRect( 0, 0, this.canvas.width, this.canvas.height );
-    ctx.fillStyle = "#FFFFFF";
-    this.drawCell(ctx,{x:0,y:0},0);
-    for ( var x = this.boardData.xrad * -1; x <= this.boardData.xrad; x++ ){
-      for ( var y = -this.boardData.yrad; y <= this.boardData.yrad; y++ ){
-        //if ((x + y ) % 2 == 0 )
-        //this.drawCell(ctx,{x:x,y:y}, 0);
-      }
-    }
-
 
     var cellPad = 1.0 / 4;
 
