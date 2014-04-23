@@ -21,7 +21,6 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
   this.lastSpawn = null;
 
 
-  this.connections.push(this);
 
   // inform client of join
   var event = {name:"joinGame"};
@@ -33,6 +32,14 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
 
   // respond with initial snake
   event.snakes = [{id:event.id, points:[]}];
+  // include other snakes
+  for ( var i = 0; i < this.connections.length; i++ ){
+    event.snakes.push(this.connections[i].snake);
+  }
+
+  // add self to connections list
+  this.connections.push(this);
+
   event.apples = this.boardData.appleList;
 
   console.log("letting " + this.id + " join");

@@ -5,8 +5,9 @@ function LocalSnakeController(snake, boardModel){
     this.snakeModel.direction = this.snakeModel.direction || 0;
     this.queuedApples = 0;
     this.freeze = false;
+    this.appleAddCount = 4;
     var that = this;
-    networkManager.listen("ateApple", function(){that.queuedApples++});
+    networkManager.listen("ateApple", function(){that.queuedApples+=4});
 }
 
 
@@ -56,6 +57,9 @@ LocalSnakeController.prototype.simulateFrame = function( inputs ){
       pointToAdd.y -= this.boardModel.height;
     }
     this.snakeModel.addPoint(pointToAdd);
+
+    boardView.simulateFrame();
+
     this.boardModel.notifyNetworkChange();
 
 }

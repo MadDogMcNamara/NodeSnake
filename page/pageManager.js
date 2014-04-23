@@ -8,6 +8,8 @@ var boardView;
 var inactiveMenuView;
 var gameDriver;
 
+var pageState = "mainMenu";
+
 
 
 window.addEventListener( "load", function onLoad() {
@@ -15,15 +17,23 @@ window.addEventListener( "load", function onLoad() {
     countdownView = new CountdownView();
     var canvas = $("#boardCanvas")[0];
 
-    boardView = new BoardView(canvas);
     gameDriver = new GameDriver(canvas);
-    //driver.startGame();
+    boardView = new BoardView(canvas, gameDriver.boardData);
 });
 
 
 var pageEvents = {
   menuRespawn:function(){
-    gameDriver.spawn();
-    inactiveMenuView.hide();
+    if ( gameDriver.spawn() ){
+      inactiveMenuView.hide();
+      pageState = "playing";
+    }
+  },
+
+  playerDeath:function(){
+    inactiveMenuView.show();
+    pageState = "mainMenu";
   }
 }
+
+

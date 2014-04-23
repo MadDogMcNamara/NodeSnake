@@ -88,10 +88,9 @@ AppleSpawner.prototype.onAppleSpawn = function(f){
 }
 
 AppleSpawner.prototype.playerJoined = function(){
-  this.boardData.targetAppleCount = this.connections.length;
-  for ( var i = this.boardData.appleList.length; i < this.boardData.targetAppleCount; i++ ){
-    this.spawnApple();
-  }
+  console.log('player joined');
+  this.boardData.targetAppleCount++;
+  this.fillApples();
 }
 
 AppleSpawner.prototype.playerLeft = function(){

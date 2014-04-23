@@ -30,31 +30,30 @@ function GameDriver(canvas){
           that.startGame();
         }, new Date().getTime() + obj.time - new Date().getTime());
       }
+      boardView.onSpawn();
     });
 
     networkManager.listen("collision", function(obj){
       that.boardData.snakes[0].points = obj.snake.points;
       that.boardData.snakes[0].direction = 0;
       that.boardData.notifyDrawChange();
-      that.networkManager.requestRespawn();
+      boardView.onCollision();
+      pageEvents.playerDeath();
     });
     this.networkManager = networkManager;
 
     // give boarddata the network manager so it may update it as it sees fit
     this.boardData = new BoardModel(20,10, networkManager);
-    //this.boardData.notifyDrawChange();
+    this.boardData.notifyDrawChange();
 }
 
 GameDriver.prototype.gameLoop = function(){
-    var input = this.input.getInputs();
-    this.localSnakeController.simulateFrame(input);
-    if ( this.boardData.respawns.length > 0 ){
-      this.boardData.notifyDrawChange();
-    }
-    //todo
-    //this.boardData.notifyDrawChange();
+  var input = this.input.getInputs();
+  this.localSnakeController.simulateFrame(input);
+  if ( this.boardData.respawns.length > 0 ){
+    this.boardData.notifyDrawChange();
+  }
 }
-
 
 GameDriver.prototype.startGame = function(){
     this.input.inputs.splice(0,this.input.inputs.length);
@@ -64,17 +63,16 @@ GameDriver.prototype.startGame = function(){
       var that = this;
       setInterval(function(){
           that.gameLoop();
-      }, 150);
+      }, constants.frameTime);
       setInterval(function(){
           that.boardData.notifyDrawChange();
-      }, 30);
+      }, 33);
       that.boardData.notifyDrawChange();
       this.gameLoop();
     }
 }
 
 GameDriver.prototype.spawn = function(){
-  this.networkManager.requestRespawn();
+  return this.networkManager.requestRespawn();
 }
-
 

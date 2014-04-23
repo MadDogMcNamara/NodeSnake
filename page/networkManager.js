@@ -46,9 +46,11 @@ NetworkManager.prototype.sendChangedSnake = function(snake){
 }
 
 NetworkManager.prototype.requestRespawn = function(){
+  var canSend = this.canSend();
   if ( this.canSend() ){
     this.jsonSocket.sendJSON( {name:"requestRespawn"} );
   }
+  return canSend;
 }
 
 NetworkManager.prototype.listen = function(name, f){

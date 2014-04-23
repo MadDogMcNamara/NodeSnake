@@ -24,9 +24,7 @@ var connections = [];
 var unusedConnections = [];
 
 
-var boardData = {xrad:20, yrad:10};
-
-var appleTime = 1000;
+var boardData = {xrad:30, yrad:15};
 
 var appleFactory = new appleSpawner.AppleSpawner(connections, boardData);
 
@@ -36,9 +34,6 @@ appleFactory.onAppleSpawn(function(point){
     connections[i].notifyNewApple(point);
   }
 });
-
-
-
 
 wss.on('connection', function(ws) {
   var jsonws = wsJSON.getJSONWebSocket(ws);

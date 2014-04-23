@@ -76,8 +76,10 @@ BoardModel.prototype.onChangedSnake = function(changedObject){
 }
 
 BoardModel.prototype.redraw = function(){
-  boardView.drawBoard( this );
-  this.changesToDraw = false;
+  if ( boardView && boardView.drawBoard ){
+    boardView.drawBoard( );
+    this.changesToDraw = false;
+  }
 }
 
 BoardModel.prototype.notifyDrawChange = function(){
