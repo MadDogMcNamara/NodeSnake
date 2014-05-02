@@ -5,13 +5,14 @@ var invincibleTime = 4000;
 var startingLength = 1;
 var SnakeModel = require("../page/snakeModel.js").SnakeModel;
 
-SnakeConnection = function(socket, id, others, boardData, unusedConnections){
+SnakeConnection = function(socket, id, others, boardData, unusedConnections, serverData){
   this.state = "dead";
   this.unusedConnections = unusedConnections;
   this.thisListen = function(name, f){
     var that = this;
     this.jsonws.listen(name, function(event){ f.apply(that, [event]); });
   }
+  this.serverData = serverData;
 
   this.connections = others;
   this.jsonws = socket;
@@ -69,8 +70,8 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
     }
 
     if ( this.state === "alive" ){
-      // tell snake spawner player left
-      this.boardData.appleSpawner.playerLeft();
+      // tell apple spawner player left
+      this.serverData.playerInactive();
     }
   }).apply(that);});
 
@@ -154,8 +155,8 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections){
 
 SnakeConnection.prototype.sendRespawn = function(){
   this.state = "alive";
-  this.boardData.appleSpawner.playerJoined();
-  console.log("respawnin");
+  this.serverData.playerActive();
+  console.log("respawning");
   var event = {name:"respawn"};
   var newSnake = {color:this.getRandomColor(this.id)};
   newSnake.points = this.getStartingPoints(this.id);
@@ -220,13 +221,11 @@ SnakeConnection.prototype.notifyAteApple = function(point){
 }
 
 SnakeConnection.prototype.notifyDeath = function(){
-  this.boardData.appleSpawner.playerLeft();
+  this.serverData.playerInactive();
   this.state = "dead";
   var msg = {name:"collision", snake:this.snake};
   this.jsonws.sendJSON( msg );
 }
-
-
 
 
 SnakeConnection.prototype.getRandomColor = function(){

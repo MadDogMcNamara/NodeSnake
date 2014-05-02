@@ -7,6 +7,7 @@ function BoardModel(xrad, yrad){
     networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
     networkManager.listen("newApple", function(obj){ that.newApple(obj); });
     networkManager.listen("removeApple", function(obj){ that.removeApple(obj)});
+    networkManager.listen("boardSizeChange", function(obj){ that.boardSizeChange(obj)});
 }
 
 BoardModel.prototype.newApple = function(obj){
@@ -20,6 +21,10 @@ BoardModel.prototype.removeApple = function(obj){
       break;
     }
   }
+}
+
+BoardModel.prototype.boardSizeChange = function(obj){
+  this.setSize(obj.newSize.xrad, obj.newSize.yrad);
 }
 
 BoardModel.prototype.setSize = function(xrad, yrad){

@@ -36,6 +36,7 @@ function GameDriver(canvas){
     networkManager.listen("collision", function(obj){
       that.boardData.snakes[0].points = obj.snake.points;
       that.boardData.snakes[0].direction = 0;
+      that.localSnakeController.queuedApples = 0;
       that.boardData.notifyDrawChange();
       boardView.onCollision();
       pageEvents.playerDeath();

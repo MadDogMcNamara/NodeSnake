@@ -2,13 +2,10 @@ function BoardView( canvas, boardData )
 {
     this.canvas = canvas;
     this.boardData = boardData;
-    this.cx = 0;
-    this.cy = 0;
-    this.xrad = 5;
-    this.yrad = this.boardData.yrad / this.boardData.xrad * this.xrad;
     this.follow = true;
     this.followIndex = -1;
     this.smoothFollow = true;
+    this.manualZoom = 40;
     this.lastFrame = new Date().getTime();
     this.followSnakeHistory = [];
     this.historyLength = 10;
@@ -59,6 +56,17 @@ BoardView.prototype.keyDown = function(e){
   }
   if ( c === "S" ){
     this.smoothFollow = !this.smoothFollow;
+  }
+  // = push
+  if( e.keyCode === 187 ){
+    if ( this.manualZoom > 0 ){
+      this.manualZoom--;
+    }
+  }
+  if ( e.keyCode === 189){
+    if ( this.manualZoom < this.boardData.xrad ){
+      this.manualZoom++;
+    }
   }
 }
 
@@ -244,11 +252,10 @@ BoardView.prototype.getDrawCy = function() {
 }
 
 BoardView.prototype.getDrawXrad = function() {
-  var max = 40;
-  if ( this.boardData.xrad <= max ){
+  if ( this.boardData.xrad <= this.manualZoom ){
     return this.boardData.xrad;
   }
-  return max;
+  return this.manualZoom;
 }
 
 BoardView.prototype.getDrawYrad = function() {

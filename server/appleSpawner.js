@@ -1,11 +1,11 @@
-var AppleSpawner = function(connections, boardData){
+var AppleSpawner = function(connections, boardData, serverData){
   this.connections = connections;
   this.boardData = boardData;
   this.boardData.appleSpawner = this;
 
-  this.boardData.targetAppleCount = 0;
   this.boardData.appleLocations = [];
   this.boardData.appleList = [];
+  this.serverData = serverData;
 
 
 }
@@ -66,8 +66,16 @@ AppleSpawner.prototype.appleEaten = function(point){
     }
   }
 }
+
+AppleSpawner.prototype.boardShrunk = function(){
+  // todo unnecessary to remove all apples
+  while ( this.boardData.appleList.length > 0 ){
+    this.appleEaten(this.boardData.appleList[0]);
+  }
+}
+
 AppleSpawner.prototype.fillApples = function(){
-  for ( var i = this.boardData.appleList.length; i < this.boardData.targetAppleCount; i++ ){
+  for ( var i = this.boardData.appleList.length; i < this.targetAppleCount(); i++ ){
     this.spawnApple();
   }
 }
@@ -83,18 +91,19 @@ AppleSpawner.prototype.spawnAppleAtPosition = function(point){
   }
 }
 
+AppleSpawner.prototype.targetAppleCount = function(){
+  return this.serverData.getPlayingConnections();
+}
+
 AppleSpawner.prototype.onAppleSpawn = function(f){
   this.appleSpawnCallback = f;
 }
 
 AppleSpawner.prototype.playerJoined = function(){
-  console.log('player joined');
-  this.boardData.targetAppleCount++;
   this.fillApples();
 }
 
 AppleSpawner.prototype.playerLeft = function(){
-  this.boardData.targetAppleCount--;
 }
 
 module.exports.AppleSpawner = AppleSpawner;
