@@ -7,7 +7,8 @@ var WebSocket = require('ws'),
   , wsJSON = require("../page/util/wsJSON.js")
   , mod = require("../page/util/mod.js")
   , snakeConnection = require("./snakeConnection.js")
-  , appleSpawner = require("./appleSpawner.js");
+  , appleSpawner = require("./appleSpawner.js")
+  , BoardResizer = require("./boardResizer.js").BoardResizer;
 
 app.use(express.static(__dirname + '/../page'));
 
@@ -19,7 +20,6 @@ console.log('http server listening on %d', port);
 var wss = new WebSocketServer({server: server, path:"/snakews/"});
 console.log('websocket server created');
 
-var desiredBoardRatio = 2;
 var nextID = 0;
 var connections = [];
 var unusedConnections = [];
@@ -35,51 +35,45 @@ var serverData = {
   },
   playerInactive : function(){
     playingConnections--;
-    if ( numPlayersChanged() ){
-      //todo bad to remove all apples just because board shrunk
-      for ( var i = 0; i < connections.length; i++ ){
-        for ( var j = 0 ; j < appleFactory.boardData.appleList.length; j++ ){
-          connections[i].notifyRemoveApple(appleFactory.boardData.appleList[j]);
-        }
-      }
-      appleFactory.boardShrunk();
-    }
+    numPlayersChanged();
   }
 };
 
-
-var boardData = {xrad:0, yrad:0};
-
-var computeBoardSize = function(playingConnections, desiredBoardRatio){
-  var xrad;
-  var yrad;
-  var ret;
-
-  playingConnections = Math.max(playingConnections,1);
-
-  // 200 cells per connection
-  xrad = Math.sqrt(200 * playingConnections * desiredBoardRatio);
-  xrad -= 1;
-  xrad /= 2;
-  yrad = xrad / desiredBoardRatio;
-  ret = {xrad:Math.floor(xrad), yrad:Math.floor(yrad)};
-
-  return ret;
+var onNotifyBoardSizeWillChange = function(newBoardDim, time){
+  var msg = {name:"boardSizeWillChange", newSize:newBoardDim, time: time};
+  for ( var i = 0; i < connections.length; i++ ){
+    connections[i].jsonws.sendJSON(msg);
+  }
 }
 
-var numPlayersChanged = function(){
-  var newBoardDim = computeBoardSize(playingConnections, desiredBoardRatio);
-  if ( newBoardDim.xrad != boardData.xrad || newBoardDim.yrad != boardData.yrad ){
-    boardData.xrad = newBoardDim.xrad;
-    boardData.yrad = newBoardDim.yrad;
-
-    var msg = {name:"boardSizeChange", newSize:newBoardDim};
-    for ( var i = 0; i < connections.length; i++ ){
-      connections[i].jsonws.sendJSON(msg);
-    }
-    return true;
+var onNotifyBoardSizeChange = function(boardData){
+  var newBoardDim = {xrad: boardData.xrad, yrad: boardData.yrad};
+  var msg = {name:"boardSizeChange", newSize:newBoardDim};
+  for ( var i = 0; i < connections.length; i++ ){
+    connections[i].jsonws.sendJSON(msg);
   }
-  return false;
+  if ( boardResizer && !boardResizer.isSizeIncreasing() ){
+    //todo bad to remove all apples just because board shrunk
+    for ( var i = 0; i < connections.length; i++ ){
+      for ( var j = 0 ; j < appleFactory.boardData.appleList.length; j++ ){
+        connections[i].notifyRemoveApple(appleFactory.boardData.appleList[j]);
+      }
+    }
+    appleFactory.boardShrunk();
+  }
+}
+
+var boardResizerCallback = {notifyBoardSizeChange:onNotifyBoardSizeChange, notifyBoardSizeWillChange: onNotifyBoardSizeWillChange};
+
+var boardResizer = new BoardResizer(boardResizerCallback);
+
+
+var boardData = boardResizer.boardData;
+
+
+
+var numPlayersChanged = function(){
+  return boardResizer.updateWithPlayerCount(playingConnections);
 }
 
 var appleFactory = new appleSpawner.AppleSpawner(connections, boardData, serverData);

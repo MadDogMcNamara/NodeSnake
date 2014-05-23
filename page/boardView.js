@@ -6,9 +6,11 @@ function BoardView( canvas, boardData )
     this.followIndex = -1;
     this.smoothFollow = true;
     this.manualZoom = 40;
+    this.minimapVisible = true;
     this.lastFrame = new Date().getTime();
     this.followSnakeHistory = [];
     this.historyLength = 10;
+    this.previousCameraPosition = undefined;
     var that = this;
     $(document).keydown(function(e) {
       that.keyDown(e);
@@ -57,6 +59,9 @@ BoardView.prototype.keyDown = function(e){
   if ( c === "S" ){
     this.smoothFollow = !this.smoothFollow;
   }
+  if ( c === "M" ){
+    this.minimapVisible = !this.minimapVisible;
+  }
   // = push
   if( e.keyCode === 187 ){
     if ( this.manualZoom > 0 ){
@@ -100,45 +105,67 @@ BoardView.prototype.setRatio = function(width, height){
 
 }
 
-BoardView.prototype.drawCell = function( ctx, point, padRatio, circle ){
-    var cellSize = this.canvas.width / ( this.getDrawWidth() );
-    var cellPad = padRatio * cellSize;
+BoardView.prototype.drawCellFinal = function( ctx, point, circle, clipData, drawData ){
+  var padRatio = drawData.pad;
+  var cellSize = clipData.width / (drawData.xrad * 2 + 1);
+  var cellPad = padRatio * cellSize;
+  var x = point.x;
+  var y = point.y;
 
-    var left = -this.getDrawXrad();
-    var top = -this.getDrawYrad();
+  var left = -drawData.xrad;
+  var top = -drawData.yrad;
 
-    var x = point.x;
-    var y = point.y;
-    if( x - this.getDrawCx() >= (this.getDrawXrad() + 1) ){
-      x = -this.boardData.xrad + (x - this.boardData.xrad - 1);
-    }
-    if( y - this.getDrawCy() >= (this.getDrawYrad() + 1) ){
-      y = -this.boardData.yrad + (y - this.boardData.yrad - 1);
-    }
-    if( this.getDrawCx() - x >= (this.getDrawXrad() + 1) ){
-      x = this.boardData.xrad - (-this.boardData.xrad - x) + 1;
-    }
-    if( this.getDrawCy() - y >= (this.getDrawYrad() + 1) ){
-      y = this.boardData.yrad - (-this.boardData.yrad - y) + 1;
-    }
+  x += -left - drawData.cx;
+  y += -top - drawData.cy;
 
-    x += -left - this.getDrawCx();
-    y += -top - this.getDrawCy();
+  x = x * cellSize + cellPad;
+  y = y * cellSize + cellPad;
 
-    x = x * cellSize + cellPad;
-    y = y * cellSize + cellPad
+  x += clipData.x;
+  y += clipData.y;
 
-    if ( typeof circle === 'undefined' || !circle){
-      ctx.fillRect( x, y, cellSize - 2 * cellPad, cellSize - 2 * cellPad );
+  if ( typeof circle === 'undefined' || !circle){
+    ctx.fillRect( x, y, cellSize - 2 * cellPad, cellSize - 2 * cellPad );
+  }
+  else{
+    var r = (cellSize - 2 * cellPad) / 2;
+    x += r;
+    y += r;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI, false);
+    ctx.fill();
+  }
+
+}
+
+BoardView.prototype.drawCell = function( ctx, point, circle, clipData, drawData ){
+  if ( Math.abs(point.x) > this.boardData.xrad ||
+    Math.abs(point.y) > this.boardData.yrad ){
+    // never draw points that are outside the actual game board
+    return false;
+  }
+  var xrad = this.boardData.xrad;
+  var yrad = this.boardData.yrad;
+  var cpoint = {};
+  for ( var x = -1; x <= 1; x++ ){
+    for ( var y = -1; y <= 1; y++ ){
+      cpoint.x = point.x;
+      cpoint.y = point.y;
+      if ( x < 0 ){
+        cpoint.x = xrad + 1 - (-xrad - point.x);
+      }
+      if ( y < 0 ){
+        cpoint.y = yrad + 1 - (-yrad - point.y);
+      }
+      if ( x > 0 ){
+        cpoint.x = -xrad - 1 + ( point.x - xrad );
+      }
+      if ( y > 0 ){
+        cpoint.y = -yrad - 1 + ( point.y - yrad );
+      }
+      this.drawCellFinal(ctx,cpoint,circle,clipData,drawData);
     }
-    else{
-      var r = (cellSize - 2 * cellPad) / 2;
-      x += r;
-      y += r;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, 2 * Math.PI, false);
-      ctx.fill();
-    }
+  }
 }
 
 BoardView.prototype.getDrawWidth = function() {
@@ -167,20 +194,22 @@ BoardView.prototype.getDrawC = function() {
       return ret;
     }
     if ( this.followSnakeHistory.length > 0 ){
+      var points = this.followSnakeHistory;
+
+      if ( typeof this.previousCameraPosition === 'undefined' ){
+        this.previousCameraPosition = points[points.length - 1];
+      }
+
       var pos = this.followSnakeHistory[this.followSnakeHistory.length - 1];
       if ( this.smoothFollow){
-        var averageCount = this.historyLength;
-        var framePercentage = new Date().getTime() - this.lastFrame;
-        framePercentage /= constants.frameTime;
-        var totalWeight = averageCount - 1;
         var points = this.followSnakeHistory;
+        var averageCount = points.length;
         var j = points.length - 1;
         var averagePoints = [];
+        var framePercentage = -this.lastFrame + new Date().getTime();
+        framePercentage /= constants.frameTime;
 
-        var ret = {x:0, y:0};
         averagePoints.push(points[points.length-1]);
-        ret.x += averagePoints[0].x * framePercentage;
-        ret.y += averagePoints[0].y * framePercentage;
         for ( var i = 1; i < averageCount; i++ ){
           if ( j > 0 ) {
             j--;
@@ -210,9 +239,6 @@ BoardView.prototype.getDrawC = function() {
           }
 
           averagePoints.push(thisPoint);
-          var mult = ((i === averageCount - 1) ? (1 - framePercentage) : 1);
-          ret.x += averagePoints[i].x * mult;
-          ret.y += averagePoints[i].y * mult;
         }
 
         // make pos the smoothed current head
@@ -222,19 +248,8 @@ BoardView.prototype.getDrawC = function() {
           firstDiff.y *= framePercentage;
           pos = {x:firstDiff.x + averagePoints[1].x, y:firstDiff.y + averagePoints[1].y};
         }
-
-
-        ret.x /= totalWeight;
-        ret.y /= totalWeight;
-        var diff = {x:ret.x - pos.x, y:ret.y - pos.y};
-        diff.x = -diff.x / 2 + pos.x;
-        diff.y = -diff.y / 2 + pos.y;
-
-        return diff;
       }
-      else{
-        return pos;
-      }
+      return pos;
     }
     else{
       return followSnake.points[0];
@@ -262,67 +277,161 @@ BoardView.prototype.getDrawYrad = function() {
   return this.boardData.yrad / this.boardData.xrad * this.getDrawXrad();
 }
 
-BoardView.prototype.drawBoard = function(){
+BoardView.prototype.drawGame = function(){
+  this.setRatio(this.boardData.width, this.boardData.height );
 
-    this.setRatio(this.boardData.width, this.boardData.height );
+  this.drawMainBoard();
+  if ( this.minimapVisible ){
+    this.drawMinimap();
+  }
+  if ( this.boardData.willResize ){
+    this.drawResizeIndication();
+  }
+}
 
-    var ctx = this.canvas.getContext("2d");
-    ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
-    ctx.fillStyle = "#000000";
-    ctx.fillRect( 0, 0, this.canvas.width, this.canvas.height );
+BoardView.prototype.drawResizeIndication = function(){
+  var currSize = this.boardData;
+  var nextSize = this.boardData.targetBoardSize;
+  var color = "#00FF00";
+  if ( currSize.isBoardSizeGreater(nextSize) ){
+    // decreasing
+    color = "#FF0000";
+  }
 
-    var cellPad = 1.0 / 4;
+  var percentFadeIn = .1;
+  var ctx = this.canvas.getContext("2d");
+  var hgrad = ctx.createLinearGradient(0,0,0,this.canvas.height);
+  var vgrad = ctx.createLinearGradient(0,0,this.canvas.width,0);
 
-    for ( var i = 0; i < this.boardData.apples.length; i++ ){
-      ctx.fillStyle = "#00FF00";
-      this.drawCell(ctx, this.boardData.apples[i], cellPad, true);
+  vgrad.addColorStop(0, color);
+  vgrad.addColorStop(percentFadeIn, 'rgba(0,0,0,0)');
+  vgrad.addColorStop(1 - percentFadeIn, 'rgba(0,0,0,0)');
+  vgrad.addColorStop(1, color);
+
+  hgrad.addColorStop(0, color);
+  hgrad.addColorStop(percentFadeIn, 'rgba(0,0,0,0)');
+  hgrad.addColorStop(1 - percentFadeIn, 'rgba(0,0,0,0)');
+  hgrad.addColorStop(1, color);
+
+  // draw vert bars
+  ctx.fillStyle = vgrad;
+  ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+
+  // draw horiz bars
+  ctx.fillStyle = hgrad;
+  ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+
+}
+
+BoardView.prototype.drawMainBoard = function(){
+  this.drawGenericBoard();
+}
+
+BoardView.prototype.drawMinimap = function(){
+  var miniMapWidth = this.canvas.width / 9;
+  var miniMapHeight = this.canvas.height / 9;
+  clipData = {};
+  clipData.x = this.canvas.width - miniMapWidth;
+  clipData.y = this.canvas.height - miniMapHeight;
+  clipData.width = miniMapWidth;
+  clipData.height = miniMapHeight;
+
+  drawData = {};
+  drawData.xrad = this.boardData.xrad;
+  drawData.yrad = this.boardData.yrad;
+  drawData.cx = 0;
+  drawData.cy = 0;
+  drawData.pad = 0;
+
+  this.drawGenericBoard(clipData, drawData);
+}
+
+BoardView.prototype.drawGenericBoard = function(clipData, drawData){
+
+  if ( typeof clipData === 'undefined' ){
+    clipData = {};
+    clipData.x = 0;
+    clipData.y = 0;
+    clipData.width = this.canvas.width;
+    clipData.height = this.canvas.height;
+  }
+
+  if ( typeof drawData === 'undefined' ){
+    drawData = {};
+    drawData.xrad = this.getDrawXrad();
+    drawData.yrad = this.getDrawYrad();
+    drawData.cx = this.getDrawCx();
+    drawData.cy = this.getDrawCy();
+    drawData.pad = 1/4.0;
+  }
+
+  var ctx = this.canvas.getContext("2d");
+  ctx.save();
+  ctx.rect(clipData.x, clipData.y, clipData.width, clipData.height);
+  ctx.clip();
+  ctx.clearRect( clipData.x, clipData.y, clipData.width, clipData.height );
+  ctx.fillStyle = "#000000";
+  ctx.fillRect( clipData.x, clipData.y, clipData.width, clipData.height );
+
+
+  var basePad = drawData.pad;
+
+  var cellPad = 1.0 / 4;
+
+  for ( var i = 0; i < this.boardData.apples.length; i++ ){
+    ctx.fillStyle = "#00FF00";
+    drawData.pad = cellPad;
+    this.drawCell(ctx, this.boardData.apples[i], true, clipData, drawData);
+  }
+  cellPad = basePad / 7.5;
+  cellPadMax = basePad;
+  for ( var i = 0; i < this.boardData.snakes.length; i++ ){
+    var snake = this.boardData.snakes[i];
+    ctx.fillStyle = snake.color;
+
+    for ( var j = 0; j < snake.points.length; j++ ){
+      drawData.pad = cellPad + (snake.points.length - j -1) / (snake.points.length) * (cellPadMax - cellPad);
+      this.drawCell(ctx, snake.points[j], false, clipData, drawData);
     }
-    cellPad = 1.0/30;
-    cellPadMax = 1.0 / 4;
-    for ( var i = 0; i < this.boardData.snakes.length; i++ ){
-      var snake = this.boardData.snakes[i];
-      ctx.fillStyle = snake.color;
+  }
 
-      for ( var j = 0; j < snake.points.length; j++ ){
-        var currPad = cellPad + (snake.points.length - j -1) / (snake.points.length) * (cellPadMax - cellPad);
-        this.drawCell(ctx, snake.points[j], currPad);
-      }
-    }
+  var respawnAnimationTime = 500;
+  var respawnAnimationDistance = 10;
 
-    var respawnAnimationTime = 500;
-    var respawnAnimationDistance = 10;
+  for ( var i = 0; i < this.boardData.respawns.length; i++ ){
+    var respawn = this.boardData.respawns[i];
 
-    for ( var i = 0; i < this.boardData.respawns.length; i++ ){
-      var respawn = this.boardData.respawns[i];
+    var head = respawn.snake.points[respawn.snake.points.length - 1];
+    ctx.fillStyle = respawn.snake.color;
 
-      var head = respawn.snake.points[respawn.snake.points.length - 1];
-      ctx.fillStyle = respawn.snake.color;
-
-      var timeUntil = respawn.time.getTime() - new Date().getTime();
-      var dist = Math.floor(timeUntil / respawnAnimationTime * respawnAnimationDistance);
-      dist++;
-      if ( timeUntil <= respawnAnimationTime && dist >= 0 ){
-        var perimeter = (dist * 2 + 2) * (dist * 2 + 2) - (4 * dist * dist);
-        var sideLen = dist * 2 + 1;
-        var x = -dist + head.x;
-        var y = -dist + head.y;
-        for ( var j = 0; j < perimeter; j++ ){
-          this.drawCell(ctx, {x:x, y:y}, cellPad);
-          if ( j < sideLen - 1 ){
-            x++;
-          }
-          else if ( j < ( sideLen - 1 ) * 2 ){
-            y++;
-          }
+    var timeUntil = respawn.time.getTime() - new Date().getTime();
+    var dist = Math.floor(timeUntil / respawnAnimationTime * respawnAnimationDistance);
+    dist++;
+    if ( timeUntil <= respawnAnimationTime && dist >= 0 ){
+      var perimeter = (dist * 2 + 2) * (dist * 2 + 2) - (4 * dist * dist);
+      var sideLen = dist * 2 + 1;
+      var x = -dist + head.x;
+      var y = -dist + head.y;
+      for ( var j = 0; j < perimeter; j++ ){
+        drawData.pad = cellPad;
+        this.drawCell(ctx, {x:x, y:y}, false, clipData, drawData);
+        if ( j < sideLen - 1 ){
+          x++;
+        }
+        else if ( j < ( sideLen - 1 ) * 2 ){
+          y++;
+        }
           else if ( j < ( sideLen - 1 ) * 3 ){
             x--;
           }
-          else if ( j < ( sideLen - 1 ) * 4 ){
-            y--;
-          }
-        }
+            else if ( j < ( sideLen - 1 ) * 4 ){
+              y--;
+            }
       }
     }
+  }
+
+  ctx.restore();
 }
 
 

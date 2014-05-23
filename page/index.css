@@ -48,8 +48,18 @@ div.inactiveMenuWrapper
   background: rgba(191, 191, 191,.7);
   z-index:999;
 }
+div.helpMenuWrapper
+{
+  position:relative;
+  background: rgba(191, 191, 191,.7);
+  z-index:999;
+}
 
 div.inactiveMenuWrapper > div
+{
+  position:relative;
+}
+div.helpMenuWrapper > div
 {
   position:relative;
 }

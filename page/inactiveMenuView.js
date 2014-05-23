@@ -7,7 +7,14 @@ function InactiveMenuView()
   }
   this.wrapper = $("div.inactiveMenuWrapper");
   this.resize();
-  var spawnButton = $("div.inactiveMenuWrapper input");
+  var spawnButton = $("div.inactiveMenuWrapper input")[0];
+  var helpButton = $("div.inactiveMenuWrapper input")[1];
+  spawnButton = jQuery(spawnButton);
+  helpButton = jQuery(helpButton);
+  helpButton.click(function(){
+    pageEvents.menuHelp();
+  });
+
   spawnButton.click(function(){
     onUserRespawnClick();
   });

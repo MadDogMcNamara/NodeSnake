@@ -3,10 +3,15 @@ function BoardModel(xrad, yrad){
     this.initialize();
     this.apples = [];
     this.respawns = [];
+    this.willResize = false;
+    this.targetBoardSize = null;
+    this.resizeTime;
+
     networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake);});
     networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
     networkManager.listen("newApple", function(obj){ that.newApple(obj); });
     networkManager.listen("removeApple", function(obj){ that.removeApple(obj)});
+    networkManager.listen("boardSizeWillChange", function(obj){ that.boardSizeWillChange(obj.newSize, obj.time) });
     networkManager.listen("boardSizeChange", function(obj){ that.boardSizeChange(obj)});
 }
 
@@ -24,6 +29,9 @@ BoardModel.prototype.removeApple = function(obj){
 }
 
 BoardModel.prototype.boardSizeChange = function(obj){
+  this.willResize = false;
+  this.targetBoardSize = null;
+  this.resizeTime;
   this.setSize(obj.newSize.xrad, obj.newSize.yrad);
 }
 
@@ -81,8 +89,8 @@ BoardModel.prototype.onChangedSnake = function(changedObject){
 }
 
 BoardModel.prototype.redraw = function(){
-  if ( boardView && boardView.drawBoard ){
-    boardView.drawBoard( );
+  if ( boardView && boardView.drawGame ){
+    boardView.drawGame( );
     this.changesToDraw = false;
   }
 }
@@ -112,4 +120,16 @@ BoardModel.prototype.addRespawn = function(respawn){
       that.respawns.shift(that.respawns.indexOf(respawn));
     }, respawn.time.getTime() - new Date().getTime() );
   }
+}
+
+BoardModel.prototype.isBoardSizeGreater = function( b ){
+  var a = this;
+  return a.xrad >= b.xrad && a.yrad >= b.yrad;
+}
+
+BoardModel.prototype.boardSizeWillChange = function(newSize, time){
+  console.debug(newSize);
+  this.willResize = true;
+  this.targetBoardSize = newSize;
+  this.time; // todo should be date
 }

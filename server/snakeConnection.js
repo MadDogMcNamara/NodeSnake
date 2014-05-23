@@ -4,6 +4,7 @@ var respawnTime = 2000;
 var invincibleTime = 4000;
 var startingLength = 1;
 var SnakeModel = require("../page/snakeModel.js").SnakeModel;
+var PlayerStatistics = require("./playerStatistics.js").PlayerStatistics;
 
 SnakeConnection = function(socket, id, others, boardData, unusedConnections, serverData){
   this.state = "dead";
@@ -46,7 +47,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections, ser
   console.log("letting " + this.id + " join");
 
   this.jsonws.sendJSON(event);
-  this.snake = new SnakeModel({id:this.id, points:[], color:"#FFFFFF"});
+  this.snake = new SnakeModel({id:this.id, points:[], color:this.getColor(this.id)});
   // end send join
 
   this.jsonws.on('close', function(){(function() {
@@ -158,7 +159,7 @@ SnakeConnection.prototype.sendRespawn = function(){
   this.serverData.playerActive();
   console.log("respawning");
   var event = {name:"respawn"};
-  var newSnake = {color:this.getRandomColor(this.id)};
+  var newSnake = {color:this.snake.color};
   newSnake.points = this.getStartingPoints(this.id);
   newSnake.id = this.id;
 
@@ -228,19 +229,19 @@ SnakeConnection.prototype.notifyDeath = function(){
 }
 
 
-SnakeConnection.prototype.getRandomColor = function(){
-  var randomNum;
+SnakeConnection.prototype.getColor = function(){
+  var rad;
 
   // pie slices strat for max color distinguishability
   if ( this.id === 0 ){
-    randomNum = 0;
+    rad = 0;
   }
   else{
     var k = Math.floor(Math.log(this.id) / Math.log(2));
     var l = 1 << k;
     var r = this.id - l;
-    randomNum = (1 + 2 * r) / (2 * l);
-    randomNum *= 360;
+    rad = (1 + 2 * r) / (2 * l);
+    rad *= 360;
   }
 
 
@@ -254,7 +255,7 @@ SnakeConnection.prototype.getRandomColor = function(){
 
   randomNum = randomNum / p * 360;*/
 
-  var rgbColor = HSBToRGB({h:randomNum, s:100, b:100});
+  var rgbColor = HSBToRGB({h:rad, s:100, b:100});
   rgbColor = ((rgbColor.r << 16) + (rgbColor.g << 8) + rgbColor.b).toString(16);
 
   var pad = ("000000").substring(0,6 - rgbColor.length);

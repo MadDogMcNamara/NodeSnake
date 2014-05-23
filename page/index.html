@@ -1,8 +1,8 @@
 <html>
     <head>
         <script src="util/constants.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+        <script src="lib/jquery.js"></script>
+        <script src="lib/underscore-min.js"></script>
         <script src="lib/jquery.easing.1.3.js" ></script>
         <script src="lib/jquery.animate-colors-min.js" ></script>
         <script src="/util/mod.js" ></script>
@@ -18,6 +18,7 @@
         <script src="/countdownView.js"></script>
         <script src="/pageManager.js"></script>
         <script src="/inactiveMenuView.js"></script>
+        <script src="/helpMenuView.js"></script>
 
         <link rel="stylesheet" href="index.css"></link>
     </head>
@@ -34,9 +35,28 @@
             <div class="inactiveMenuWrapper">
                 <div>
                     <p>Node Snake</p>
-                    <p>Arrow keys to move</p>
                     <input type="button" value="Spawn!"></input>
+                    <input type="button" value="?"></input>
                 </div>
+            </div>
+        </div>
+        <div class="noDim">
+            <div class="helpMenuWrapper">
+                <p> This menu is lowsy todo </p>
+                <p> ---------------- </p>
+                <p> Arrow Keys to move </p>
+                <p> ---------------- </p>
+                <p> Halo around the game border indicates that the size of the board will soon change </p>
+                <p> ---------------- </p>
+                <p> Toggle-able at any time: </p>
+                <p> m - minimap </p>
+                <p> f - follow snake </p>
+                <p> s - smooth follow snake </p>
+                <p>---------------- </p>
+                <p> = - zoom in <p>
+                <p> - - zoom out <p>
+                <p>-----------------</p>
+                <p> space to spawn </p>
             </div>
         </div>
 
