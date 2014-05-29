@@ -287,6 +287,35 @@ BoardView.prototype.drawGame = function(){
   if ( this.boardData.willResize ){
     this.drawResizeIndication();
   }
+  //this.drawPlayerData();
+}
+
+
+// todo delete this debug only function
+BoardView.prototype.drawPlayerData = function(){
+  var text = [];
+  var totText = "";
+  var ctx = this.canvas.getContext("2d");
+  for ( var i = 0; i < this.boardData.snakes.length; i++ ){
+    var snake = this.boardData.snakes[i];
+    for ( var j = 0; j < this.boardData.statisticsData.length; j++ ){
+      var data = this.boardData.statisticsData[j];
+      if ( snake.id === data.id ){
+        // draw this data
+        var color = snake.color;
+        var text = "deaths: " + data.numberDeaths + "\n";
+        text += "kills: " + data.numberKills;
+        totText += text;
+      }
+    }
+  }
+  ctx.font = "bold 12px sans-serif";
+
+  ctx.fillStyle = "blue";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText(totText, 300, 300);
+
 }
 
 BoardView.prototype.drawResizeIndication = function(){

@@ -19,6 +19,9 @@
         <script src="/pageManager.js"></script>
         <script src="/inactiveMenuView.js"></script>
         <script src="/helpMenuView.js"></script>
+        <script src="/leaderboardView.js"></script>
+        <script src="/util/playerStatistics.js"></script>
+
 
         <link rel="stylesheet" href="index.css"></link>
     </head>
@@ -31,17 +34,20 @@
                 <div class="countdownText"></div>
             </div>
         </div>
-        <div class="noDim">
+        <div class="noDim menu">
             <div class="inactiveMenuWrapper">
                 <div>
                     <p>Node Snake</p>
-                    <input type="button" value="Spawn!"></input>
-                    <input type="button" value="?"></input>
+                    <span>
+                        <input type="button" value="Spawn!"></input>
+                        <input type="button" value="?"></input>
+                        <input type="button" value="scores"></input>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="noDim">
-            <div class="helpMenuWrapper">
+            <div class="helpMenuWrapper menu">
                 <p> This menu is lowsy todo </p>
                 <p> ---------------- </p>
                 <p> Arrow Keys to move </p>
@@ -60,5 +66,14 @@
             </div>
         </div>
 
+        <div class="noDim">
+            <div class="outerLeaderboard menu">
+                <span class="innerLeaderboard">
+                    <div class="tableDiv">
+                    </div>
+                    <input type="button" value="back"></input>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -1,3 +1,16 @@
+// modify stringify
+(function(){
+  var oldStringify = JSON.stringify;
+
+  JSON.stringify = function(x){
+    if ( x.stringify && x.stringify.call ){
+      return x.stringify();
+    }
+    else{
+      return oldStringify.apply(JSON, [x]);
+    }
+  }
+})();
 
 {
   var root;

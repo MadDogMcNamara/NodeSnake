@@ -6,8 +6,6 @@ var AppleSpawner = function(connections, boardData, serverData){
   this.boardData.appleLocations = [];
   this.boardData.appleList = [];
   this.serverData = serverData;
-
-
 }
 
 AppleSpawner.prototype.spawnApple = function(){
@@ -67,12 +65,29 @@ AppleSpawner.prototype.appleEaten = function(point){
   }
 }
 
-AppleSpawner.prototype.boardShrunk = function(){
-  // todo unnecessary to remove all apples
-  while ( this.boardData.appleList.length > 0 ){
-    this.appleEaten(this.boardData.appleList[0]);
+AppleSpawner.prototype.trimApples = function(boardData){
+  var newList = [];
+  var removeList = [];
+  for ( var i = 0; i < this.boardData.appleList.length; i++ ){
+    var apple = this.boardData.appleList[i];
+    if ( apple.x < -boardData.xrad ||
+         apple.x > boardData.xrad ||
+         apple.y > boardData.yrad ||
+         apple.y < -boardData.yrad ){
+      // if so its outside the board and should be trimmed
+      removeList.push(apple);
+      this.boardData.appleLocations[apple.y][apple.x] = false;
+    }
+    else{
+      newList.push(apple);
+    }
   }
+  this.boardData.appleList = newList;
+
+  this.fillApples();
+  return removeList;
 }
+
 
 AppleSpawner.prototype.fillApples = function(){
   for ( var i = this.boardData.appleList.length; i < this.targetAppleCount(); i++ ){

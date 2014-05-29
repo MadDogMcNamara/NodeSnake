@@ -4,10 +4,13 @@ var respawnTime = 2000;
 var invincibleTime = 4000;
 var startingLength = 1;
 var SnakeModel = require("../page/snakeModel.js").SnakeModel;
-var PlayerStatistics = require("./playerStatistics.js").PlayerStatistics;
+var PlayerStatistics = require("../page/util/playerStatistics.js").PlayerStatistics;
 
 SnakeConnection = function(socket, id, others, boardData, unusedConnections, serverData){
-  this.state = "dead";
+  this.playerStatistics = new PlayerStatistics();
+  this.playerStatistics.setId(id);
+  this.playerStatistics.setColor(this.getColor(id));
+  console.log(this.playerStatistics.getColor());
   this.unusedConnections = unusedConnections;
   this.thisListen = function(name, f){
     var that = this;
@@ -70,7 +73,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections, ser
       this.connections[i].jsonws.sendJSON( message );
     }
 
-    if ( this.state === "alive" ){
+    if ( this.playerStatistics.getState() === "alive" ){
       // tell apple spawner player left
       this.serverData.playerInactive();
     }
@@ -90,16 +93,24 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections, ser
     var deaths = [];
     for ( var i = 0; i < this.connections.length; i++ ){
       var otherPoints = this.connections[i].snake.points;
-      for ( var j = 0; j < (otherPoints.length - ((this.id === this.connections[i].id) ? 1 : 0 )); j++){
-        var body = otherPoints[j];
-        if ( body.x === head.x && body.y === head.y ){
-          if ( !this.isInvincible() ){
+      if ( !this.connections[i].isInvincible() && !this.isInvincible() ){
+        for ( var j = 0; j < (otherPoints.length - ((this.id === this.connections[i].id) ? 1 : 0 )); j++){
+          var body = otherPoints[j];
+          if ( body.x === head.x && body.y === head.y ){
+            // this snake died
             deaths[this.id] = 1;
-          }
-          if ( j === otherPoints.length - 1 ){
-            // they died too
-            if ( !this.connections[i].isInvincible() ){
+            this.playerStatistics.addDeath();
+
+            if ( j === otherPoints.length - 1 ){
+              // they died
               deaths[this.connections[i].id] = 1;
+              this.connections[i].playerStatistics.addDeath();
+            }
+
+            // check if snake hit gains a kill
+            if ( !deaths[this.connections[i].id] ){
+              this.connections[i].playerStatistics.addKill();
+              this.playerStatistics.addAssassinated();
             }
           }
         }
@@ -146,6 +157,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections, ser
     }
 
     this.boardData.appleSpawner.fillApples();
+    this.playerStatistics.updateSnakeLength(this.snake.points.length);
 
   });
   this.thisListen("requestRespawn", function(){
@@ -155,7 +167,7 @@ SnakeConnection = function(socket, id, others, boardData, unusedConnections, ser
 }
 
 SnakeConnection.prototype.sendRespawn = function(){
-  this.state = "alive";
+  this.playerStatistics.setState( "alive" );
   this.serverData.playerActive();
   console.log("respawning");
   var event = {name:"respawn"};
@@ -216,6 +228,7 @@ SnakeConnection.prototype.notifyRemoveApple = function(point){
 }
 
 SnakeConnection.prototype.notifyAteApple = function(point){
+  this.playerStatistics.addApple();
   var msg = {name:"ateApple"};
   msg.location = point;
   this.jsonws.sendJSON( msg );
@@ -223,23 +236,23 @@ SnakeConnection.prototype.notifyAteApple = function(point){
 
 SnakeConnection.prototype.notifyDeath = function(){
   this.serverData.playerInactive();
-  this.state = "dead";
+  this.playerStatistics.setState( "dead" );
   var msg = {name:"collision", snake:this.snake};
   this.jsonws.sendJSON( msg );
 }
 
 
-SnakeConnection.prototype.getColor = function(){
+SnakeConnection.prototype.getColor = function(id){
   var rad;
 
   // pie slices strat for max color distinguishability
-  if ( this.id === 0 ){
+  if ( id === 0 ){
     rad = 0;
   }
   else{
-    var k = Math.floor(Math.log(this.id) / Math.log(2));
+    var k = Math.floor(Math.log(id) / Math.log(2));
     var l = 1 << k;
-    var r = this.id - l;
+    var r = id - l;
     rad = (1 + 2 * r) / (2 * l);
     rad *= 360;
   }

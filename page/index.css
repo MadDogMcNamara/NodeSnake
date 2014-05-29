@@ -42,24 +42,14 @@ div.countdownText
   height:800px;
 }
 
-div.inactiveMenuWrapper
-{
-  position:relative;
-  background: rgba(191, 191, 191,.7);
-  z-index:999;
-}
-div.helpMenuWrapper
+div.menu
 {
   position:relative;
   background: rgba(191, 191, 191,.7);
   z-index:999;
 }
 
-div.inactiveMenuWrapper > div
-{
-  position:relative;
-}
-div.helpMenuWrapper > div
+div.menu > div
 {
   position:relative;
 }
@@ -80,14 +70,48 @@ div.inactiveMenuWrapper > div > p:first-of-type
   font-size:120pt;
 }
 
-div.inactiveMenuWrapper > div > input
+div.inactiveMenuWrapper > div > span
+{
+  display:inline-block;
+  position:relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top:100px;
+}
+
+div.inactiveMenuWrapper > div input
 {
   font-family:arial;
-  display:block;
+  display:inline;
   border-radius:5px;
   padding:20px;
   margin-left: auto;
   margin-right: auto;
   font-size:100px;
   color:black;
+}
+
+span.innerLeaderboard
+{
+  position:relative;
+  display:inline-block;
+}
+span.innerLeaderboard table,th,td
+{
+  overflow:auto;
+  font-size:25pt;
+  padding:20px;
+  border-style:solid;
+  border-color:black;
+  border-width:1px;
+  border-collapse:collapse;
+  text-align:center;
+}
+span.innerLeaderboard input
+{
+  margin-top: 30px;
+  display:block;
+  width:100px;
+  margin-left:auto;
+  margin-right:auto;
 }

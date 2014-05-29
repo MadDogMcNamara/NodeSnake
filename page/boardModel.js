@@ -6,6 +6,8 @@ function BoardModel(xrad, yrad){
     this.willResize = false;
     this.targetBoardSize = null;
     this.resizeTime;
+    this.statisticsData = [];
+    this.colors = {};
 
     networkManager.listen("snakeChanged", function( snake ){ that.onChangedSnake(snake);});
     networkManager.listen("playerQuit", function(obj){that.onPlayerQuit(obj);});
@@ -13,8 +15,16 @@ function BoardModel(xrad, yrad){
     networkManager.listen("removeApple", function(obj){ that.removeApple(obj)});
     networkManager.listen("boardSizeWillChange", function(obj){ that.boardSizeWillChange(obj.newSize, obj.time) });
     networkManager.listen("boardSizeChange", function(obj){ that.boardSizeChange(obj)});
+    networkManager.listen("allPlayerData", function(obj){that.onAllPlayerStatisticsData(obj);});
 }
 
+BoardModel.prototype.onAllPlayerStatisticsData = function(obj){
+  this.statisticsData = [];
+  for ( var i = 0; i < obj.data.length; i++ ){
+    this.statisticsData.push( new PlayerStatistics( obj.data[i] ) );
+  }
+  leaderboardView.updateView();
+}
 BoardModel.prototype.newApple = function(obj){
   this.apples.push(obj.location);
 }
@@ -63,6 +73,7 @@ BoardModel.prototype.initialize = function(obj){
     if ( obj && obj.snakes ){
       for( var i = 0; i < obj.snakes.length; i++ ){
         this.snakes[i] = new SnakeModel(obj.snakes[i]);
+        this.colors[this.snakes[i].id] = this.snakes[i].color;
       }
     }
 }
@@ -109,6 +120,7 @@ BoardModel.prototype.notifyNetworkChange = function(){
 BoardModel.prototype.addSnake = function(snake){
   var ret = new SnakeModel(snake);
   this.snakes.push(ret);
+  this.colors[snake.id] = snake.color;
   return ret;
 }
 
@@ -128,8 +140,8 @@ BoardModel.prototype.isBoardSizeGreater = function( b ){
 }
 
 BoardModel.prototype.boardSizeWillChange = function(newSize, time){
-  console.debug(newSize);
   this.willResize = true;
   this.targetBoardSize = newSize;
   this.time; // todo should be date
 }
+

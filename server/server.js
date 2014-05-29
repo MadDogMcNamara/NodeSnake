@@ -8,7 +8,8 @@ var WebSocket = require('ws'),
   , mod = require("../page/util/mod.js")
   , snakeConnection = require("./snakeConnection.js")
   , appleSpawner = require("./appleSpawner.js")
-  , BoardResizer = require("./boardResizer.js").BoardResizer;
+  , BoardResizer = require("./boardResizer.js").BoardResizer
+  , StatisticsManager = require("./statisticsManager.js").StatisticsManager;
 
 app.use(express.static(__dirname + '/../page'));
 
@@ -53,14 +54,15 @@ var onNotifyBoardSizeChange = function(boardData){
     connections[i].jsonws.sendJSON(msg);
   }
   if ( boardResizer && !boardResizer.isSizeIncreasing() ){
-    //todo bad to remove all apples just because board shrunk
-    for ( var i = 0; i < connections.length; i++ ){
-      for ( var j = 0 ; j < appleFactory.boardData.appleList.length; j++ ){
-        connections[i].notifyRemoveApple(appleFactory.boardData.appleList[j]);
+    var removedApples = appleFactory.trimApples(boardData);
+    for ( var i = 0; i < removedApples.length; i++ ){
+      var removedApple = removedApples[i];
+      for ( var j = 0; j < connections.length; j++ ){
+        connections[j].notifyRemoveApple(removedApple);
       }
     }
-    appleFactory.boardShrunk();
   }
+  appleSpawner.fillApples();
 }
 
 var boardResizerCallback = {notifyBoardSizeChange:onNotifyBoardSizeChange, notifyBoardSizeWillChange: onNotifyBoardSizeWillChange};
@@ -87,6 +89,7 @@ appleFactory.onAppleSpawn(function(point){
 
 wss.on('connection', function(ws) {
   var jsonws = wsJSON.getJSONWebSocket(ws);
+  var statManager;
   var connection;
 
   jsonws.listen("joinGame", function(event){
@@ -101,6 +104,7 @@ wss.on('connection', function(ws) {
       nextID++;
     }
     connection = new SnakeConnection(jsonws, id, connections, boardData, unusedConnections, serverData);
+    statManager = new StatisticsManager(connection, connections);
   });
 
 });
