@@ -39,6 +39,7 @@ var serverData = {
     numPlayersChanged();
   }
 };
+var appleFactory;
 
 var onNotifyBoardSizeWillChange = function(newBoardDim, time){
   var msg = {name:"boardSizeWillChange", newSize:newBoardDim, time: time};
@@ -62,7 +63,9 @@ var onNotifyBoardSizeChange = function(boardData){
       }
     }
   }
-  appleSpawner.fillApples();
+  if ( appleFactory ){
+    appleFactory.fillApples();
+  }
 }
 
 var boardResizerCallback = {notifyBoardSizeChange:onNotifyBoardSizeChange, notifyBoardSizeWillChange: onNotifyBoardSizeWillChange};
@@ -78,7 +81,7 @@ var numPlayersChanged = function(){
   return boardResizer.updateWithPlayerCount(playingConnections);
 }
 
-var appleFactory = new appleSpawner.AppleSpawner(connections, boardData, serverData);
+appleFactory = new appleSpawner.AppleSpawner(connections, boardData, serverData);
 
 appleFactory.onAppleSpawn(function(point){
   // tell all the connections about it
