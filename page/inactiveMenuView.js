@@ -28,7 +28,7 @@ function InactiveMenuView()
 
   $(document).keydown(function(e) {
     // if space
-    if ( e.keyCode == 32 ){
+    if ( e.keyCode === 32 ){
       onUserRespawnClick();
     }
   });
@@ -36,16 +36,23 @@ function InactiveMenuView()
 
 InactiveMenuView.prototype.resize = function(){
   var pageWidth = parseInt(getStyle(document.body, "width"));
-  this.wrapper[0].style.height = getStyle(document.body, "height");
-  this.wrapper[0].style.width = getStyle(document.body, "width");
+  var pageHeight = parseInt(getStyle(document.body, "height"));
+  this.wrapper[0].style.height = pageHeight + "px";
+  this.wrapper[0].style.width = pageWidth + "px";
 
-  var inner = $("div.inactiveMenuWrapper > div");
-  var height = parseInt(getStyle(inner[0],"height"), 10);
-  inner[0].style.top = parseInt(this.wrapper[0].style.height,10) / 2 - height / 2;
-  // center the span
-  var innerSpan = this.wrapper.find("span");
-  var spanWidth = parseInt(innerSpan.css("width"));
-  innerSpan.css("left", "" + (pageWidth / 2 - spanWidth / 2) + "px");
+  var buttonWrapper = $(this.wrapper.find("div")[1])[0];
+  buttonWrapper.style.width = pageWidth * .75 + "px";
+  buttonWrapper.style["margin-left"] = pageWidth * .125 + "px";
+  buttonWrapper.style["margin-right"] = pageWidth * .125 + "px";
+
+  $(buttonWrapper).find("input").css("font-size", pageWidth * .05 + "pt");
+  $(buttonWrapper).find("input").css("padding", pageWidth * .01 + "px");
+  $(buttonWrapper).find("input").css("border-radius", pageWidth * .01 + "px");
+
+  var titleText = $(this.wrapper.find("p"));
+  titleText.css("font-size", pageWidth * .10 + "pt");
+
+  $(this.wrapper.find("div")[0]).css("padding-bottom", pageHeight * .125 + "px")
 }
 
 

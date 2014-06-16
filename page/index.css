@@ -8,7 +8,10 @@
 
 body
 {
-overflow:hidden;
+  font-family:arial;
+  overflow:hidden;
+  height:100%;
+  width:100%
 }
 
 *
@@ -26,68 +29,47 @@ div.noDim
 
 div.countdownTextWrapper
 {
+  display:table;
   position:absolute;
-  top:100px;
 }
 
-div.countdownText
+span.countdownText
 {
-  font-family:arial;
-  font-size:20pt;
   display:table-cell;
   color:white;
   vertical-align:middle;
   text-align:center;
-  width:800px;
-  height:800px;
 }
 
 div.menu
 {
-  position:relative;
-  background: rgba(191, 191, 191,.7);
+  position: relative;
+  background: rgba(191, 191, 191, .7);
   z-index:999;
 }
 
-div.menu > div
+div.inactiveMenuWrapper > div:nth-child(2)
 {
-  position:relative;
+  display: table;
+  table-layout: fixed;
 }
 
 div.inactiveMenuWrapper > div > p
 {
-  font-family:arial;
-  position:relative;
-  color:black;
-  margin-left: auto;
-  margin-right: auto;
-  font-size:70pt;
   text-align:center;
-  margin-bottom:50px;
-}
-div.inactiveMenuWrapper > div > p:first-of-type
-{
-  font-size:120pt;
 }
 
 div.inactiveMenuWrapper > div > span
 {
-  display:inline-block;
-  position:relative;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top:100px;
+  display: table-cell;
+  text-align:center;
 }
 
-div.inactiveMenuWrapper > div input
+div.inactiveMenuWrapper input
 {
-  font-family:arial;
-  display:inline;
-  border-radius:5px;
-  padding:20px;
-  margin-left: auto;
-  margin-right: auto;
-  font-size:100px;
+  border-style:solid;
+  border-radius:1px;
+  border-color:black;
   color:black;
 }
 
@@ -99,8 +81,6 @@ span.innerLeaderboard
 span.innerLeaderboard table,th,td
 {
   overflow:auto;
-  font-size:25pt;
-  padding:20px;
   border-style:solid;
   border-color:black;
   border-width:1px;
@@ -111,7 +91,8 @@ span.innerLeaderboard input
 {
   margin-top: 30px;
   display:block;
-  width:100px;
+  width:30%;
+  height:10%;
   margin-left:auto;
   margin-right:auto;
 }

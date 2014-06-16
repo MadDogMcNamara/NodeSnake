@@ -1,4 +1,6 @@
 <html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
     <head>
         <script src="util/constants.js"></script>
         <script src="lib/jquery.js"></script>
@@ -21,8 +23,7 @@
         <script src="/helpMenuView.js"></script>
         <script src="/leaderboardView.js"></script>
         <script src="/util/playerStatistics.js"></script>
-
-
+        <script src="lib/jquery.touchy.js"></script>
         <link rel="stylesheet" href="index.css"></link>
     </head>
     <body>
@@ -31,18 +32,18 @@
         </div>
         <div class="noDim">
             <div class="countdownTextWrapper">
-                <div class="countdownText"></div>
+                <span class="countdownText"></div>
             </div>
         </div>
         <div class="noDim menu">
             <div class="inactiveMenuWrapper">
                 <div>
                     <p>Node Snake</p>
-                    <span>
-                        <input type="button" value="Spawn!"></input>
-                        <input type="button" value="?"></input>
-                        <input type="button" value="scores"></input>
-                    </span>
+                </div>
+                <div>
+                    <span><input type="button" value="Spawn!"></input></span>
+                    <span><input type="button" value="?"></input></span>
+                    <span><input type="button" value="scores"></input></span>
                 </div>
             </div>
         </div>
@@ -63,6 +64,9 @@
                 <p> - - zoom out <p>
                 <p>-----------------</p>
                 <p> space to spawn </p>
+                <div>
+                    <input type="button" value="back"></input>
+                </div>
             </div>
         </div>
 

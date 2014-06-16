@@ -1,19 +1,16 @@
 function CountdownView(){
-  var textDiv = $("div.countdownText");
+  var textDiv = $("span.countdownText");
   var wrapper = $("div.countdownTextWrapper");
 
   function setNumber(num, time, f){
+    var pageWidth = parseInt(getStyle(document.body, "width"));
+    var pageHeight = parseInt(getStyle(document.body, "height"));
+    wrapper.css("height", pageHeight + "px");
+    wrapper.css("width", pageWidth + "px");
+
     textDiv[0].innerText = "" + ((num == 0) ? "GO" : num);
-    textDiv[0].style.fontSize = "400pt";
-    textDiv.animate({"font-size":"90pt"},{duration:time,easing:"easeOutExpo", done:f});
-  }
-
-  function center(){
-    var width = parseInt(getStyle( textDiv[0], "width"), 10);
-    var height = parseInt(getStyle( textDiv[0], "height"), 10);
-
-    wrapper[0].style.top = document.body.clientHeight / 2 - height / 2;
-    wrapper[0].style.left = document.body.clientWidth / 2 - width / 2;
+    textDiv[0].style.fontSize = pageWidth * .2 + "pt";
+    textDiv.animate({"font-size":pageWidth * .1 + "pt"},{duration:time,easing:"easeOutExpo", done:f});
   }
 
   function hide(){
@@ -24,7 +21,6 @@ function CountdownView(){
   }
 
   function countdownFrom(i){
-    center();
     show();
     if ( i <= 1 ){
       hide();

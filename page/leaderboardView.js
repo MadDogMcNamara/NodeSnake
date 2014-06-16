@@ -33,6 +33,7 @@ LeaderboardView.prototype.getSortFunction = function(){
 }
 
 LeaderboardView.prototype.updateView = function(){
+  var pageWidth = parseInt(getStyle(document.body, "width"));
   var tableData = [];
   this.tableDiv.empty();
   var sortedData = this.boardData.statisticsData;
@@ -56,8 +57,8 @@ LeaderboardView.prototype.updateView = function(){
     var row = $(rows[i]);
     var data = sortedData[i-1];
     var pictureBlock = $(row.children()[1]);
-    var width = 80;
-    var height = 90;
+    var width = pageWidth * .05;
+    var height = width;
 
     width += "px";
     height += "px;"
@@ -90,6 +91,9 @@ LeaderboardView.prototype.resize = function(){
   this.outerDiv[0].style.width = pageWidth;
   pageWidth = parseInt(pageWidth);
   pageHeight = parseInt(pageHeight);
+
+  $("span.innerLeaderboard table,th,td").css("font-size", pageWidth * .01 + "pt");
+  $("span.innerLeaderboard table,th,td").css("padding", pageWidth * .02 + "px " + pageWidth * .02 + "px");
 
   var tableWidth = parseInt(this.innerDiv.css("width"));
   var tableHeight = parseInt(this.innerDiv.css("height"));
