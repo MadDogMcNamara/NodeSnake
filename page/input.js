@@ -1,4 +1,6 @@
-function SnakeInput(){
+function SnakeInput(canvas){
+
+    this.canvas = canvas;
     var inputs = [];
     this.inputs = inputs;
     var that = this;
@@ -14,6 +16,10 @@ function SnakeInput(){
         }
     }).apply(that, [event])});
 
+    $(canvas).on("touchy-swipe",function(e, $target, data){
+      var dirs = {right:0,up:1,left:2,down:3};
+      that.inputs.push(dirs[data.direction]);
+    });
     networkManager.listen("collision", function(){
       that.inputs.splice(0,that.inputs.length);
     });
